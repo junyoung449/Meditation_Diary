@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.mt.fileupload.config.AwsS3Uploader;
+import com.project.mt.fileupload.service.FileUploadService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class FileController {
 
 	private final AwsS3Uploader awsS3Uploader;
-	// private final TestService testService;
+
+	private final FileUploadService fileUploadService;
 
 	@PostMapping("/upload")
 	public Map<String, Object> upload(@RequestParam("image") MultipartFile[] imageMultipartFile) throws IOException {
@@ -25,13 +27,13 @@ public class FileController {
 		// String[] audioFileNames = awsS3Uploader.upload(audioMultipartFile, "audio");
 		String[] audioFileNames = new String[3];
 
-		// testService.save(imageFileNames, audioFileNames);
+		fileUploadService.save(imageFileNames, audioFileNames);
 
-		// Map<String, Object> result = testService.getText(imageFileNames);
+		Map<String, Object> result = fileUploadService.getText(imageFileNames);
 
 		// result.add(imageFileNames);
 		// result.add(audioFileNames);
 
-		// return result;
+		return result;
 	}
 }
