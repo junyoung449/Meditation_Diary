@@ -27,7 +27,7 @@ public class AwsS3Uploader {
 	@Value("${cloud.aws.s3.bucket}")
 	public String bucket;
 
-	@Value("${s3.url}")
+	@Value("${cloud.aws.s3.url}")
 	public String s3Url;
 
 	public String[] upload(MultipartFile[] multipartFile, String dirName) throws IOException {

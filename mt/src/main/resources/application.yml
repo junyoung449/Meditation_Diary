@@ -28,6 +28,7 @@ oauth:
 cloud:
   aws:
     s3:
+      url: ${S3_URL}
       bucket: ${S3_BUCKET}
     credentials:
       access-key: ${CREDENTIALS_ACCESS_KEY}
