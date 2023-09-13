@@ -1,6 +1,46 @@
+# MySQL 설정
 spring:
-  profiles.include:
-    - s3
-    - db
-    - jwt
-    - oauth
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+    credentials:
+      access-key: ${CREDENTIALS_ACCESS_KEY}
+      secret-key: ${CREDENTIALS_SECRET_KEY}
+    region:
+      static: ${REGION_STATIC}
+      auto: false
+    stack:
+      auto: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
