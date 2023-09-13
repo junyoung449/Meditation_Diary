@@ -2,7 +2,9 @@ package com.project.mt.meditation.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.mt.member.domain.Member;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +32,11 @@ public class Meditation {
 	@Column(name = "date")
 	private Timestamp date;
 
-	// Getter와 Setter 메서드
+	@JsonIgnore
+	@OneToMany(mappedBy = "meditation_image", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MeditationImage> meditationImage;
 
-	// 다른 필드와 관련된 매핑 및 관계 매핑 추가 가능
+	@JsonIgnore
+	@OneToMany(mappedBy = "meditation_audio", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MeditationAudio> meditationAudio;
 }
