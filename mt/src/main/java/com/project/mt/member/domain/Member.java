@@ -2,13 +2,18 @@ package com.project.mt.member.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "member")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 public class Member {
 
@@ -28,5 +33,4 @@ public class Member {
 
 	@Column(name = "social_id")
 	private String socialId;
-
 }
