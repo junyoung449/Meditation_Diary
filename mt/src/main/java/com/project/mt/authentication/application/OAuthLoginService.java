@@ -17,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 public class OAuthLoginService {
 
     private final MemberRepository memberRepository;
+
     private final AuthTokensGenerator authTokensGenerator;
+
+    // 각 서비스 소셜의 서버에 accessToken, refreshToken 요청을 담당
     private final RequestOAuthInfoService requestOAuthInfoService;
 
     public AuthTokens login(OAuthLoginParams params) {
@@ -26,7 +29,15 @@ public class OAuthLoginService {
         return authTokensGenerator.generate(memberId);
     }
 
+    /**
+     * DB에 oAuthInfoResponse 와 일치하는 유저 정보가
+     * 이미 있으면 유저의 고유 idx 를 가져오고,
+     * 없으면 DB에 유저를 저장
+     * @param oAuthInfoResponse : DB에 있는지 확인할 유저의 정보
+     * @return
+     */
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
+        System.out.println(oAuthInfoResponse.getOAuthProvider());
         return memberRepository.findMemberByEmail(oAuthInfoResponse.getEmail())
                 .map(Member::getMemberIdx)
                 .orElseGet(() -> newMember(oAuthInfoResponse));
@@ -36,7 +47,7 @@ public class OAuthLoginService {
         Member member = Member.builder()
                 .email(oAuthInfoResponse.getEmail())
                 .name(oAuthInfoResponse.getNickname())
-                // .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
+                .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build();
 
         return memberRepository.save(member).getMemberIdx();

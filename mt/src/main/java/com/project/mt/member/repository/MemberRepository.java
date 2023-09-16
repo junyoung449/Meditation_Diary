@@ -9,5 +9,7 @@ import com.project.mt.member.domain.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+	Optional<Member> findMemberByMemberIdx(Long memberIdx);
 	Optional<Member> findMemberByEmail(String email);
 }
