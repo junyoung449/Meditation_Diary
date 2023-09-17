@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemoResponseDto {
     Long memo_idx;
-//    Long member_idx;
+    Long member_idx;
     String content;
     LocalDateTime date;
 }

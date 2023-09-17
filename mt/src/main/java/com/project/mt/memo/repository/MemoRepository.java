@@ -7,11 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemoRepository extends JpaRepository<Memo, Long> {
 
-    @Query("SELECT * FROM Memo WHERE member_idx = :memberIdx")
+    @Query("SELECT m FROM Memo m WHERE m.id = :memberIdx")
     List<Memo> findMemberMemo(@Param("memberIdx") Long memberIdx);
+
+
+    Optional<Memo> findMemoById(Long memoIdx);
 
 }

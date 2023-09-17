@@ -29,9 +29,9 @@ public class MemberController {
         Map<String, String> response = new HashMap<>();
 
         if (memberService.deleteMemberByMemberIdx(memberIdx)) {
-            response.put("resmsg", "삭제 성공");
+            response.put("resmsg", "회원 탈퇴 성공");
         } else {
-            response.put("resmsg", "삭제 실패");
+            response.put("resmsg", "회원 탈퇴 실패");
         }
 
         return ResponseEntity.ok(response);

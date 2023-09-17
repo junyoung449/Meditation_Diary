@@ -1,5 +1,6 @@
 package com.project.mt.memo.dto.request;
 
+import com.project.mt.memo.domain.Memo;
 import lombok.*;
 
 @Data
@@ -7,5 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class MemoRequestDto {
-    Long memo_idx;
+    private Long memoIdx;
+    private Long memberIdx;
+    private String content;
 }

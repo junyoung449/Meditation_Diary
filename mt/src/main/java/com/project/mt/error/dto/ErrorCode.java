@@ -17,11 +17,7 @@ public enum ErrorCode {
     ROLE_NOT_EXISTS(403, "ACCOUNT-004", "권한이 부족한 경우"),
     TOKEN_NOT_EXISTS(404, "ACCOUNT-005", "해당 key의 인증 토큰이 존재하지 않는 경우"),
 
-    ARTIST_NOT_FOUND(404, "ARTIST-001", "가수를 찾을 수 없는 경우"),
-
-    SONG_NOT_FOUND(404, "SONG-001", "곡을 찾을 수 없는 경우"),
-
-    CONTEST_INVALID_DATE(400, "CONTEST-001", "선정 곡 날짜가 적절치 않은 경우");
+    MEMO_NOT_EXISTS(500, "MEMO-001", "메모가 없는 경우");
 
     private final int status;
     private final String errorCode;

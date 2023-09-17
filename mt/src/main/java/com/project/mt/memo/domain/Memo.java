@@ -2,6 +2,8 @@ package com.project.mt.memo.domain;
 
 import com.project.mt.member.domain.Member;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Getter
+@Builder
 public class Memo {
 
     @Id
@@ -20,6 +23,7 @@ public class Memo {
     @Column(name = "content")
     private String content;
 
+    @CreationTimestamp
     @Column(name = "date")
     private LocalDateTime date;
 
@@ -27,9 +31,9 @@ public class Memo {
     @JoinColumn(name = "member_idx")
     private Member member;
 
-    @Builder
-    public Memo(String content) {
-        this.content = content;
-    }
+//    @Builder
+//    public Memo(String content) {
+//        this.content = content;
+//    }
 
 }
