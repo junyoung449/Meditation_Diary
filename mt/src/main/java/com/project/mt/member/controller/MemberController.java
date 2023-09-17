@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/member")
 @CrossOrigin(origins = "*")
@@ -19,5 +22,18 @@ public class MemberController {
     public ResponseEntity<Member> findMemberByMemberIdx(@PathVariable Long memberIdx) {
 
         return ResponseEntity.ok(memberService.findMemberByMemberIdx(memberIdx));
+    }
+
+    @DeleteMapping("/{memberIdx}")
+    public ResponseEntity<Map<String, String>> deleteMemberByMemberIdx(@PathVariable Long memberIdx) {
+        Map<String, String> response = new HashMap<>();
+
+        if (memberService.deleteMemberByMemberIdx(memberIdx)) {
+            response.put("resmsg", "삭제 성공");
+        } else {
+            response.put("resmsg", "삭제 실패");
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

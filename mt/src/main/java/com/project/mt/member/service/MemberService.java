@@ -16,12 +16,18 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final GlobalExceptionHandler globalExceptionHandler;
 
     public Member findMemberByMemberIdx(Long memberIdx) {
-
-        Optional<Member> member = memberRepository.findMemberByMemberIdx(memberIdx);
-
         return memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND, "유저 없음"));
+    }
+
+    public boolean deleteMemberByMemberIdx(Long memberIdx) {
+        try {
+            memberRepository.deleteById(memberIdx);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }
