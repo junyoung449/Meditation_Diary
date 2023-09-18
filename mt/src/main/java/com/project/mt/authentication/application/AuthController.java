@@ -1,9 +1,11 @@
 package com.project.mt.authentication.application;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.mt.authentication.domain.AuthTokens;
@@ -23,12 +25,12 @@ public class AuthController {
     private final OAuthLoginService oAuthLoginService;
 
     /**
-     * @param params : 소셜 서비스, 인가코드를 가지고있는 파라미터
+     * @param code : 소셜 서비스, 인가코드를 가지고있는 파라미터
      * @return
      */
-    @PostMapping("/kakao")
-    public ResponseEntity<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
-        System.out.println(params.getAuthorizationCode());
+    @GetMapping("/kakao")
+    public ResponseEntity<AuthTokens> loginKakao(@RequestParam("code") String code) {
+        KakaoLoginParams params = new KakaoLoginParams(code);
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }
 

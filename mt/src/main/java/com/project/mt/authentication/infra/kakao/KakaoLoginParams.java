@@ -6,11 +6,13 @@ import org.springframework.util.MultiValueMap;
 import com.project.mt.authentication.domain.oauth.OAuthLoginParams;
 import com.project.mt.authentication.domain.oauth.OAuthProvider;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+// @NoArgsConstructor
+@AllArgsConstructor
 public class KakaoLoginParams implements OAuthLoginParams {
     private String authorizationCode;
 

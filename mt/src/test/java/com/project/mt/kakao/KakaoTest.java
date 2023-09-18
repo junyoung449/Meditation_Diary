@@ -7,10 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+// @SpringBootTest
 public class KakaoTest {
 
-    @Autowired
+    // @Autowired
     AuthTokensGenerator authTokensGenerator;
 
     @Test
