@@ -20,6 +20,7 @@ public class AuthController {
 
     @PostMapping("/kakao")
     public ResponseEntity<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
+        System.out.println(params.getAuthorizationCode());
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }
 
