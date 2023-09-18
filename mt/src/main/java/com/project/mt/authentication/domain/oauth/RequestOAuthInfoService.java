@@ -17,6 +17,9 @@ public class RequestOAuthInfoService {
         );
     }
 
+    /**
+     * 각 소셜 서비스의 서버에 AccessToken 을 요청
+     */
     public OAuthInfoResponse request(OAuthLoginParams params) {
         OAuthApiClient client = clients.get(params.oAuthProvider());
         String accessToken = client.requestAccessToken(params);
