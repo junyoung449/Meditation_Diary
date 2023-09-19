@@ -11,5 +11,5 @@ import com.project.mt.member.domain.Member;
 
 @Repository
 public interface MeditationRepository extends JpaRepository<Meditation, Long> {
-	Optional<List<Meditation>> findByMemberAndDate_MonthOrderByDate(Member member, int month);
+	// Optional<List<Meditation>> findByMemberAndDate_MonthOrderByDate(Member member, int month);
 }
