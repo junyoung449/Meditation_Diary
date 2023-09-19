@@ -29,23 +29,23 @@ public class MemoController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 메모 상세조회
-    // @GetMapping("/{memoIdx}")
-    // public ResponseEntity<?> findMemoByMemoIdx(@PathVariable("memoIdx") Long memoIdx) {
-    //     return ResponseEntity.ok(memoService.findMemoByMemoIdx(memoIdx));
-    // }
-    //
-    // // 메모 작성
-    // @PostMapping
-    // public ResponseEntity<?> saveMemo(@RequestBody MemoRequestDto memoRequestDto) {
-    //     return ResponseEntity.ok(memoService.saveMemo(memoRequestDto));
-    // }
-    //
-    // // 메모 수정
-    // @PutMapping
-    // public ResponseEntity<?> modifyMemo(@RequestBody MemoRequestDto memoRequestDto) {
-    //     return ResponseEntity.ok(memoService.modifyMemo(memoRequestDto));
-    // }
+     // 메모 상세조회
+     @GetMapping("/{memoIdx}")
+     public ResponseEntity<?> findMemoByMemoIdx(@PathVariable("memoIdx") Long memoIdx) {
+         return ResponseEntity.ok(memoService.findMemoByMemoIdx(memoIdx));
+     }
+
+     // 메모 작성
+     @PostMapping
+     public ResponseEntity<?> saveMemo(@RequestBody MemoRequestDto memoRequestDto) {
+         return ResponseEntity.ok(memoService.saveMemo(memoRequestDto));
+     }
+
+     // 메모 수정
+     @PutMapping
+     public ResponseEntity<?> modifyMemo(@RequestBody MemoRequestDto memoRequestDto) {
+         return ResponseEntity.ok(memoService.modifyMemo(memoRequestDto));
+     }
 
     // 메모 삭제
     @DeleteMapping("/{memoIdx}")

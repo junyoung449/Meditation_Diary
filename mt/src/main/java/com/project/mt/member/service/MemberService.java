@@ -1,5 +1,7 @@
 package com.project.mt.member.service;
 
+import com.project.mt.exception.GlobalExceptionHandler;
+import com.project.mt.exception.NotFoundException;
 import com.project.mt.member.domain.Member;
 import com.project.mt.member.dto.response.MemberResponseDto;
 import com.project.mt.member.repository.MemberRepository;
@@ -14,11 +16,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    // public MemberResponseDto findMemberByMemberIdx(Long memberIdx) {
-    //     Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND, "유저 없음"));
-    //
-    //     return new MemberResponseDto(member.getMemberIdx(), member.getEmail(), member.getName(), member.getRefreshToken(), member.getOAuthProvider());
-    // }
+     public MemberResponseDto findMemberByMemberIdx(Long memberIdx) {
+         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+
+         return new MemberResponseDto(member.getMemberIdx(), member.getEmail(), member.getName(), member.getRefreshToken(), member.getOAuthProvider());
+     }
 
     public boolean deleteMemberByMemberIdx(Long memberIdx) {
         try {

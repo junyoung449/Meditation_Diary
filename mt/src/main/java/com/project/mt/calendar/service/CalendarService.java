@@ -1,7 +1,12 @@
 package com.project.mt.calendar.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.project.mt.exception.NotFoundException;
+import com.project.mt.meditation.domain.Meditation;
+import com.project.mt.member.domain.Member;
+import com.project.mt.memo.repository.MemoRepository;
 import org.springframework.stereotype.Service;
 
 import com.project.mt.calendar.dto.request.CalendarFindRequestDto;
@@ -16,11 +21,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CalendarService {
 
-	private final MeditationRepository meditationRepository;
+    private final MeditationRepository meditationRepository;
+	private final MemoRepository memoRepository;
+	private final MemberRepository memberRepository;
+
+    public List<CalendarFindResponseDto> findMeditationsByMember(CalendarFindRequestDto calendarFindRequestDto) {
+        Member member = memberRepository.findMemberByMemberIdx(calendarFindRequestDto.getMemberIdx()).orElseThrow(() -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+
+		return meditationRepository.findMeditationsByMember(member)
+				.stream()
+				.map(this::mapMeditationToResponseDto)
+				.collect(Collectors.toList());
+    }
+
+	// Meditation을 CalendarFindResponseDto로 변환하는 매핑 메서드
+	private CalendarFindResponseDto mapMeditationToResponseDto(Meditation meditation) {
+
+		CalendarFindResponseDto responseDto = new CalendarFindResponseDto(meditation.getDate(), meditation.getMeditationIdx(), );
 
 
-	// public List<CalendarFindResponseDto> findCalendarByMemberIdxAndMonth(CalendarFindRequestDto calendarFindRequestDto) {
-	// 	meditationRepository.findByMemberAndDate_MonthOrderByDate();
-	// }
-
+		return responseDto;
+	}
 }

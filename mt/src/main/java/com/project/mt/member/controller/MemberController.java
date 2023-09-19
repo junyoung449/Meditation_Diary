@@ -18,10 +18,10 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    // @GetMapping("/{memberIdx}")
-    // public ResponseEntity<?> findMemberByMemberIdx(@PathVariable Long memberIdx) {
-    //     return ResponseEntity.ok(memberService.findMemberByMemberIdx(memberIdx));
-    // }
+     @GetMapping("/{memberIdx}")
+     public ResponseEntity<?> findMemberByMemberIdx(@PathVariable Long memberIdx) {
+         return ResponseEntity.ok(memberService.findMemberByMemberIdx(memberIdx));
+     }
 
     @DeleteMapping("/{memberIdx}")
     public ResponseEntity<Map<String, String>> deleteMemberByMemberIdx(@PathVariable Long memberIdx) {
