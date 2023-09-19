@@ -1,17 +1,16 @@
-package com.project.mt.memo.dto.response;
+package com.project.mt.meditation.dto.response;
 
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class MemoResponseDto {
-    private Long memoIdx;
+public class MeditationListResponseDto {
+    private Long meditationIdx;
     private Long memberIdx;
-    private String content;
     private Timestamp date;
+    private String meditationImage;
 }

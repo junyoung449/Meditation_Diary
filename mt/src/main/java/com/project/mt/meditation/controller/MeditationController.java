@@ -14,7 +14,11 @@ import com.project.mt.meditation.dto.request.MeditationRequestDto;
 import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController("/api/meditaion")
+@CrossOrigin(origins = "*")
 public class MeditationController {
 
 	@Autowired

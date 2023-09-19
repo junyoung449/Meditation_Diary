@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "meditation")
@@ -29,6 +30,7 @@ public class Meditation {
 	@JoinColumn(name = "member_idx")
 	private Member member;
 
+	@CreationTimestamp
 	@Column(name = "date")
 	private Timestamp date;
 
