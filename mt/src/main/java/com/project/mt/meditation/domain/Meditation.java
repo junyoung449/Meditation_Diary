@@ -29,8 +29,4 @@ public class Meditation {
 
 	@Column(name = "date")
 	private Timestamp date;
-
-	// Getter와 Setter 메서드
-
-	// 다른 필드와 관련된 매핑 및 관계 매핑 추가 가능
 }
