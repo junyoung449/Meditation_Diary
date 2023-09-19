@@ -2,13 +2,16 @@ package com.project.mt.meditation.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.mt.member.domain.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "meditation")
@@ -27,6 +30,15 @@ public class Meditation {
 	@JoinColumn(name = "member_idx")
 	private Member member;
 
+	@CreationTimestamp
 	@Column(name = "date")
 	private Timestamp date;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MeditationImage> meditationImages;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MeditationAudio> meditationAudios;
 }

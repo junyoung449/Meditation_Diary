@@ -1,18 +1,19 @@
 package com.project.mt.calendar.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.project.mt.exception.NotFoundException;
+import com.project.mt.calendar.dto.request.CalendarRequestDto;
+import com.project.mt.calendar.dto.response.CalendarResponseDto;
+import com.project.mt.exception.ErrorCode;
+import com.project.mt.exception.RestApiException;
 import com.project.mt.meditation.domain.Meditation;
 import com.project.mt.member.domain.Member;
+import com.project.mt.memo.domain.Memo;
 import com.project.mt.memo.repository.MemoRepository;
 import org.springframework.stereotype.Service;
 
-import com.project.mt.calendar.dto.request.CalendarFindRequestDto;
-import com.project.mt.calendar.dto.response.CalendarFindResponseDto;
 import com.project.mt.meditation.repository.MeditationRepository;
-import com.project.mt.member.dto.response.MemberResponseDto;
 import com.project.mt.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,21 +26,31 @@ public class CalendarService {
 	private final MemoRepository memoRepository;
 	private final MemberRepository memberRepository;
 
-    public List<CalendarFindResponseDto> findMeditationsByMember(CalendarFindRequestDto calendarFindRequestDto) {
-        Member member = memberRepository.findMemberByMemberIdx(calendarFindRequestDto.getMemberIdx()).orElseThrow(() -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+    public List<CalendarResponseDto> findMeditationsByMember(CalendarRequestDto calendarRequestDto) {
+        Member member = memberRepository.findMemberByMemberIdx(calendarRequestDto.getMemberIdx()).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-		return meditationRepository.findMeditationsByMember(member)
-				.stream()
-				.map(this::mapMeditationToResponseDto)
-				.collect(Collectors.toList());
+		List<Meditation> meditationResponse =  meditationRepository.findMeditationsByMember(member);
+		if (meditationResponse == null || meditationResponse.isEmpty()) throw new RestApiException(ErrorCode.MEDITATION_NOT_FOUND);
+
+		List<Memo> memoResponse = memoRepository.findMemberMemo(member.getMemberIdx());
+		if (memoResponse == null || memoResponse.isEmpty()) throw new RestApiException(ErrorCode.MEMO_NOT_FOUND);
+
+		return mapMeditationAndMemoToResponseDto(meditationResponse, memoResponse);
     }
 
-	// Meditation을 CalendarFindResponseDto로 변환하는 매핑 메서드
-	private CalendarFindResponseDto mapMeditationToResponseDto(Meditation meditation) {
+	// Meditation 과 Memo 를 CalendarResponseDto 로 변환하는 매핑 메서드
+	private List<CalendarResponseDto> mapMeditationAndMemoToResponseDto(List<Meditation> meditationResponse, List<Memo> memoResponse) {
+		List<CalendarResponseDto> responseDto = new ArrayList<>();
 
-		CalendarFindResponseDto responseDto = new CalendarFindResponseDto(meditation.getDate(), meditation.getMeditationIdx(), );
+		for (int i = 0 ; i < memoResponse.size() ; i++) {
+			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(meditationResponse.get(i).getDate()
+					, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
 
+			responseDto.add(calendarResponseDto);
+		}
 
 		return responseDto;
 	}
+
+
 }

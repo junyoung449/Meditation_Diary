@@ -52,11 +52,8 @@ public class MemoController {
     public ResponseEntity<?> deleteMemo(@PathVariable("memoIdx") Long memoIdx) {
         Map<String, String> response = new HashMap<>();
 
-        if (memoService.deleteMemo(memoIdx)) {
-            response.put("resmsg", "메모 삭제 성공");
-        } else {
-            response.put("resmsg", "메모 삭제 실패");
-        }
+        memoService.deleteMemo(memoIdx);
+        response.put("resmsg", "메모 글 삭제를 성공했습니다.");
 
         return ResponseEntity.ok(response);
     }

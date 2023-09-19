@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class CalendarFindRequestDto {
+public class CalendarRequestDto {
 	private Long memberIdx;
 	private int month;
 }

@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class CalendarFindResponseDto {
+public class CalendarResponseDto {
 	private Timestamp date;
 	private Long memoIdx;
 	private Long meditationIdx;
