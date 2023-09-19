@@ -30,7 +30,7 @@ public class FileUploadService {
 
 	public Map<String, Object> getText(String[] imageFileNames) {
 		JSONObject requestBody = useJson.createRequestBody(imageFileNames);
-		System.out.println(requestBody.toJSONString());
+
 		Map<String, Object> response = useJson.callConversionApi(requestBody);
 		return response;
 	}

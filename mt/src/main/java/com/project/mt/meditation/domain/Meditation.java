@@ -35,10 +35,10 @@ public class Meditation {
 	private Timestamp date;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "meditation_image", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MeditationImage> meditationImage;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "meditation_audio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MeditationAudio> meditationAudio;
 }
