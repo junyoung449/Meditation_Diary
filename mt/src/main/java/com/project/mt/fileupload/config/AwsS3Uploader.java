@@ -3,6 +3,7 @@ package com.project.mt.fileupload.config;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,11 +31,11 @@ public class AwsS3Uploader {
 	@Value("${cloud.aws.s3.url}")
 	public String s3Url;
 
-	public String[] upload(MultipartFile[] multipartFile, String dirName) throws IOException {
-		File[] uploadFiles = new File[multipartFile.length];
+	public String[] upload(List<MultipartFile> images, String dirName) throws IOException {
+		File[] uploadFiles = new File[images.size()];
 
-		for (int i = 0 ; i < multipartFile.length ; i++) {
-			uploadFiles[i] = convert(multipartFile[i])
+		for (int i = 0 ; i < images.size() ; i++) {
+			uploadFiles[i] = convert(images.get(i))
 				.orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail")); // 파일 생성
 		}
 

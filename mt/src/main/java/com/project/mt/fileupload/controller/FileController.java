@@ -1,6 +1,8 @@
 package com.project.mt.fileupload.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,19 +23,20 @@ public class FileController {
 
 	private final FileUploadService fileUploadService;
 
-	@PostMapping("/upload")
-	public Map<String, Object> upload(@RequestParam("image") MultipartFile[] imageMultipartFile) throws IOException {
-		String[] imageFileNames = awsS3Uploader.upload(imageMultipartFile, "image");
-		// String[] audioFileNames = awsS3Uploader.upload(audioMultipartFile, "audio");
-		String[] audioFileNames = new String[3];
+	 @PostMapping("/upload")
+	 public Map<String, Object> upload(@RequestParam("image") MultipartFile[] imageMultipartFile) throws IOException {
+	 	String[] imageFileNames = awsS3Uploader.upload(Arrays.asList(imageMultipartFile), "image");
 
-		fileUploadService.save(imageFileNames, audioFileNames);
+	 	// String[] audioFileNames = awsS3Uploader.upload(audioMultipartFile, "audio");
+	 	String[] audioFileNames = new String[3];
 
-		Map<String, Object> result = fileUploadService.getText(imageFileNames);
+	 	fileUploadService.save(imageFileNames, audioFileNames);
 
-		// result.add(imageFileNames);
-		// result.add(audioFileNames);
+	 	Map<String, Object> result = fileUploadService.getText(imageFileNames);
 
-		return result;
-	}
+	 	// result.add(imageFileNames);
+	 	// result.add(audioFileNames);
+
+	 	return result;
+	 }
 }
