@@ -38,7 +38,6 @@ public class AwsS3Uploader {
 				.orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail")); // 파일 생성
 		}
 
-		System.out.println(dirName); // image
 		return upload(uploadFiles, dirName);
 	}
 
@@ -48,7 +47,6 @@ public class AwsS3Uploader {
 		for (int i = 0 ; i < uploadFiles.length ; i++) {
 			String fileName = dirName + "/" + UUID.randomUUID() + uploadFiles[i].getName();
 			uploadUrls[i] = putS3(uploadFiles[i], fileName);    // s3로 업로드
-			System.out.println(uploadUrls[i]);
 			removeNewFile(uploadFiles[i]);
 		}
 
