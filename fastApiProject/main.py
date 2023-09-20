@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-
+import boto3
+import dotenv
+import uvicorn as uvicorn
+from aiohttp import ClientError
 from fastapi import FastAPI
 
 # ipynb 실행용
@@ -12,13 +15,34 @@ from pydantic import BaseModel
 
 from typing import List
 
+from database import engineconn
+
+import models
+
+from models import MeditationAudio
+
 app = FastAPI()
 
+dotenv.load_dotenv()
+
+client_s3 = boto3.client(
+    's3',
+    aws_access_key_id=os.getenv("CREDENTIALS_ACCESS_KEY"),
+    aws_secret_access_key=os.getenv("CREDENTIALS_SECRET_KEY")
+)
+
+engine = engineconn()
+session = engine.sessionmaker()
+
 class ImageURLRequest(BaseModel):
+    meditationIdx: int
     images: List[str]
 
+class Audio(BaseModel):
+    audioName: str
+
 @app.post("/text")
-async def ipynb(imageRequest: ImageURLRequest):
+def ipynb(imageRequest: ImageURLRequest):
     resultList = []
     # IPython 노트북 파일 경로 설정
     ipynb_file_path = "ipynb/image_chatgpt.ipynb"
@@ -52,6 +76,35 @@ async def ipynb(imageRequest: ImageURLRequest):
             elif 'data' in output and 'text/plain' in output['data']:
                 result += output['data']['text/plain']
 
-        resultList.append(result)
+        # resultList.append(result)
+
+        # 명상용 텍스트 -> 음성
+
+        # 음성파일 프로젝트에 저장
+
+        # saveAudio(음성파일명) 호출
+        audioUrl = saveAudioAtS3()
+
+        saveMeditationAudioUrlAtDB(audioUrl, imageRequest.meditationIdx)
 
     return {"message": resultList}
+
+def saveAudioAtS3(audio : Audio):
+    try:
+        client_s3.upload_file(
+            "./"+audio.audioName,
+            os.getenv("S3_BUCKET"),
+            "audio/" + audio.audioName,
+            ExtraArgs={'ContentType': 'audio/mp3'}
+        )
+
+        return os.getenv("S3_URL") + audio.audioName
+    except ClientError as e:
+        print(f'Credential error => {e}')
+    except Exception as e:
+        print(f"Another error => {e}")
+
+def saveMeditationAudioUrlAtDB(audioUrl, meditationIdx):
+    db_meditationAudio = models.MeditationAudio(meditation_idx=meditationIdx, audio_url=audioUrl)
+    session.add(db_meditationAudio)
+    session.commit()
