@@ -1,5 +1,9 @@
 # Test your FastAPI endpoints
 
 ###
-POST http://127.0.0.1:8000/text
+#POST https://j9b205.p.ssafy.io/ai/text
+#POST http://127.0.0.1:8000/ai/text
+#Accept: application/json
+
+GET http://127.0.0.1:8000/ai/audio
 Accept: application/json

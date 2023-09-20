@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+import uvicorn
+from aiohttp import ClientError
 from fastapi import FastAPI
 
 # ipynb 실행용
@@ -12,12 +14,20 @@ from pydantic import BaseModel
 
 from typing import List
 
+import boto3
+
+import dotenv
+
+dotenv.load_dotenv()
+
 app = FastAPI()
+
 
 class ImageURLRequest(BaseModel):
     images: List[str]
 
-@app.post("/text")
+
+@app.post("/ai/text")
 async def ipynb(imageRequest: ImageURLRequest):
     resultList = []
     # IPython 노트북 파일 경로 설정
@@ -55,3 +65,29 @@ async def ipynb(imageRequest: ImageURLRequest):
         resultList.append(result)
 
     return {"message": resultList}
+
+
+import boto3
+
+def s3_connection():
+    try:
+        # s3 클라이언트 생성
+        s3 = boto3.client(
+            service_name="s3",
+            region_name="ap-northeast-2",
+            aws_access_key_id="AKIAYJ4UAMZIK2UJGZF7",
+            aws_secret_access_key="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",
+        )
+    except Exception as e:
+        print(e)
+    else:
+        print("s3 bucket connected!")
+        return s3
+
+
+s3 = s3_connection()
+
+try:
+    s3.upload_file("{로컬에서 올릴 파일이름}","{버킷 이름}","{버킷에 저장될 파일 이름}")
+except Exception as e:
+    print(e)
