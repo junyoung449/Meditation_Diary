@@ -2,7 +2,7 @@
   "name": "black-dashboard-react",
   "version": "1.2.2",
   "private": true,
-  "homepage": "https://demos.creative-tim.com/black-dashboard-react/#/admin/dashboard",
+  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.4.0",
     "bootstrap": "4.6.2",
