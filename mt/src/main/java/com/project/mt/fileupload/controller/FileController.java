@@ -24,7 +24,7 @@ public class FileController {
 	private final FileUploadService fileUploadService;
 
 	 @PostMapping("/upload")
-	 public Map<String, Object> upload(@RequestParam("image") MultipartFile[] imageMultipartFile) throws IOException {
+	 public void upload(@RequestParam("image") MultipartFile[] imageMultipartFile) throws IOException {
 	 	String[] imageFileNames = awsS3Uploader.upload(Arrays.asList(imageMultipartFile), "image");
 
 	 	// String[] audioFileNames = awsS3Uploader.upload(audioMultipartFile, "audio");
@@ -32,11 +32,11 @@ public class FileController {
 
 	 	fileUploadService.save(imageFileNames, audioFileNames);
 
-	 	Map<String, Object> result = fileUploadService.getText(imageFileNames);
+//	 	Map<String, Object> result = fileUploadService.getText(imageFileNames);
 
 	 	// result.add(imageFileNames);
 	 	// result.add(audioFileNames);
 
-	 	return result;
+//	 	return result;
 	 }
 }
