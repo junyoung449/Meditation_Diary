@@ -30,6 +30,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
 import KakaoLogined from "./components/Kakao/Kakao";
+import Create from "components/CRUD/Create";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -41,6 +42,7 @@ root.render(
           <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/rtl/*" element={<RTLLayout />} />
           <Route path="/kakao" element={<KakaoLogined />} />
+          <Route path="/crud" element={<Create />} />
           <Route
             path="*"
             element={<Navigate to="/admin/dashboard" replace />}
