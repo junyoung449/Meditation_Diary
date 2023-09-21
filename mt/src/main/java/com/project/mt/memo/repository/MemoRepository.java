@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface MemoRepository extends JpaRepository<Memo, Long> {
 
-    @Query("SELECT m FROM Memo m WHERE m.id = :memberIdx")
+    @Query("SELECT m FROM Memo m WHERE m.memoIdx = :memberIdx")
     List<Memo> findMemberMemo(@Param("memberIdx") Long memberIdx);
 
 
-    Optional<Memo> findMemoById(Long memoIdx);
+    Optional<Memo> findMemoByMemoIdx(Long memoIdx);
 
 }

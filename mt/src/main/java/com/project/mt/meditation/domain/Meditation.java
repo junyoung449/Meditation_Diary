@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "meditation")
@@ -29,14 +30,15 @@ public class Meditation {
 	@JoinColumn(name = "member_idx")
 	private Member member;
 
+	@CreationTimestamp
 	@Column(name = "date")
 	private Timestamp date;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "meditation_image", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MeditationImage> meditationImage;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "meditation_audio", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MeditationAudio> meditationAudio;
 }
