@@ -43,6 +43,17 @@ function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const handleKakaoLogin = () => {
+    // 환경 변수에서 값을 가져오기
+    const clientId = process.env.REACT_APP_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+    
+    // GET 요청을 보낼 엔드포인트 URL
+    const apiUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`; // GET 요청을 보낼 URL로 변경
+    // console.log('확인')
+    window.location.href = apiUrl
+    console.log(clientId, redirectUri)
+  }
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -157,6 +168,9 @@ function AdminNavbar(props) {
                   <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
+                  <NavLink tag="li">
+                    <DropdownItem className="nav-item" onClick={handleKakaoLogin}>카카오 로그인</DropdownItem>
+                  </NavLink>
                   <NavLink tag="li">
                     <DropdownItem className="nav-item">Profile</DropdownItem>
                   </NavLink>
