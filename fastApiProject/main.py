@@ -2,7 +2,8 @@
 import os
 
 from aiohttp import ClientError
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
+from pathlib import Path
 
 # ipynb 실행용
 import nbformat
@@ -35,9 +36,6 @@ client_s3 = boto3.client(
     aws_secret_access_key=os.getenv("CREDENTIALS_SECRET_KEY")
 )
 
-# engine = engineconn()
-# session = engine.sessionmaker()
-
 class Audio(BaseModel):
     audioName: List[str]
 
@@ -48,7 +46,9 @@ class ImageURLRequest(BaseModel):
 
 @app.post("/ai/text")
 def ipynb(imageRequest: ImageURLRequest):
-    audioUrl: List[str]
+    audioUrl = []
+    fileName = []
+
     # IPython 노트북 파일 경로 설정
     ipynb_file_path = "ipynb/image_chatgpt.ipynb"
 
@@ -81,27 +81,27 @@ def ipynb(imageRequest: ImageURLRequest):
             elif 'data' in output and 'text/plain' in output['data']:
                 result += output['data']['text/plain']
 
-        # resultList.append(result)
-
         # 명상용 텍스트 -> 음성
 
         # 음성파일 프로젝트에 저장
+        file_path = "./audio/" + "파일명"
 
-        # saveAudio(음성파일명) 호출
-        audioUrl = saveAudioAtS3()
+        # 파일 저장 (UploadFile -> 실제 저장할 파일)
+        with file_path.open("wb") as f:
+            f.write(UploadFile.file.read())
 
-        audioUrl.append(audioUrl)
+        fileName.append("파일명")
 
-    return {"audios": audioUrl}
+    return {"audios": saveAudioAtS3(fileName)}
 
 @app.post("/ai/audio")
-def saveAudioAtS3():
+def saveAudioAtS3(audio):
     audioUrl = []
 
-    audio = []
+    # audio = []
 
-    audio.append("440Hz-5sec.mp3")
-    audio.append("1000Hz-5sec.mp3")
+    # audio.append("440Hz-5sec.mp3")
+    # audio.append("1000Hz-5sec.mp3")
 
     try:
         for a in audio:
@@ -117,13 +117,8 @@ def saveAudioAtS3():
 
             audioUrl.append(os.getenv("S3_URL") + "/" + a)
 
-        return {"audios": audioUrl}
+        return audioUrl
     except ClientError as e:
         print(f'Credential error => {e}')
     except Exception as e:
         print(f"Another error => {e}")
-
-# def saveMeditationAudioUrlAtDB(audioUrl, meditationIdx):
-#     db_meditationAudio = models.MeditationAudio(meditation_idx=meditationIdx, audio_url=audioUrl)
-#     session.add(db_meditationAudio)
-#     session.commit()
