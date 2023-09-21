@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker
 import os
 import dotenv
 
+
+
 dotenv.load_dotenv()
 
 DB_URL = 'mysql+pymysql://'+os.getenv("DB_USERNAME")+':'+os.getenv("DB_PASSWORD")+'@'+os.getenv("DB_HOST")+':'+os.getenv("DB_PORT")+'/'+os.getenv("DB_NAME")

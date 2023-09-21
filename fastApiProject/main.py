@@ -25,8 +25,6 @@ from database import engineconn
 
 import models
 
-# from models import MeditationAudio
-
 app = FastAPI()
 
 dotenv.load_dotenv()
@@ -37,11 +35,11 @@ client_s3 = boto3.client(
     aws_secret_access_key=os.getenv("CREDENTIALS_SECRET_KEY")
 )
 
-engine = engineconn()
-session = engine.sessionmaker()
+# engine = engineconn()
+# session = engine.sessionmaker()
 
 class Audio(BaseModel):
-    audioName: str
+    audioName: List[str]
 
 class ImageURLRequest(BaseModel):
     meditationIdx: int
@@ -50,7 +48,7 @@ class ImageURLRequest(BaseModel):
 
 @app.post("/ai/text")
 def ipynb(imageRequest: ImageURLRequest):
-    resultList = []
+    audioUrl: List[str]
     # IPython 노트북 파일 경로 설정
     ipynb_file_path = "ipynb/image_chatgpt.ipynb"
 
@@ -92,28 +90,40 @@ def ipynb(imageRequest: ImageURLRequest):
         # saveAudio(음성파일명) 호출
         audioUrl = saveAudioAtS3()
 
-        saveMeditationAudioUrlAtDB(audioUrl, imageRequest.meditationIdx)
+        audioUrl.append(audioUrl)
 
-    return {"message": resultList}
+    return {"audios": audioUrl}
 
 @app.post("/ai/audio")
-def saveAudioAtS3(audio : Audio):
+def saveAudioAtS3():
+    audioUrl = []
+
+    audio = []
+
+    audio.append("440Hz-5sec.mp3")
+    audio.append("1000Hz-5sec.mp3")
+
     try:
-        client_s3.upload_file(
-            "./"+audio.audioName,
-            os.getenv("S3_BUCKET"),
-            "audio/" + audio.audioName,
-            ExtraArgs={'ContentType': 'audio/mp3'}
-        )
-        
-        # 로컬에 저장되어있는 음성파일 삭제
-        print(os.getenv("S3_URL") + "/" +audio.audioName)
+        for a in audio:
+            client_s3.upload_file(
+                "./audio/"+a,
+                os.getenv("S3_BUCKET"),
+                "audio/" + a,
+                ExtraArgs={'ContentType': 'audio/mp3'}
+            )
+
+            # 로컬에 저장되어있는 음성파일 삭제
+            os.remove("./audio/" + a)
+
+            audioUrl.append(os.getenv("S3_URL") + "/" + a)
+
+        return {"audios": audioUrl}
     except ClientError as e:
         print(f'Credential error => {e}')
     except Exception as e:
         print(f"Another error => {e}")
 
-def saveMeditationAudioUrlAtDB(audioUrl, meditationIdx):
-    db_meditationAudio = models.MeditationAudio(meditation_idx=meditationIdx, audio_url=audioUrl)
-    session.add(db_meditationAudio)
-    session.commit()
+# def saveMeditationAudioUrlAtDB(audioUrl, meditationIdx):
+#     db_meditationAudio = models.MeditationAudio(meditation_idx=meditationIdx, audio_url=audioUrl)
+#     session.add(db_meditationAudio)
+#     session.commit()
