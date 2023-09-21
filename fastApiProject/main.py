@@ -96,6 +96,7 @@ def ipynb(imageRequest: ImageURLRequest):
 
     return {"message": resultList}
 
+@app.post("/ai/audio")
 def saveAudioAtS3(audio : Audio):
     try:
         client_s3.upload_file(
@@ -104,8 +105,9 @@ def saveAudioAtS3(audio : Audio):
             "audio/" + audio.audioName,
             ExtraArgs={'ContentType': 'audio/mp3'}
         )
-
-        return os.getenv("S3_URL") + audio.audioName
+        
+        # 로컬에 저장되어있는 음성파일 삭제
+        print(os.getenv("S3_URL") + "/" +audio.audioName)
     except ClientError as e:
         print(f'Credential error => {e}')
     except Exception as e:
