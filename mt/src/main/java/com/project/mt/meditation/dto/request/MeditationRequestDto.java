@@ -9,8 +9,7 @@ import lombok.Data;
 @Data
 public class MeditationRequestDto {
 
-	private int memberIdx;
-
+	private Long memberIdx;
 	private List<MultipartFile> images;
 
 }

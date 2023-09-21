@@ -37,7 +37,7 @@ public class UseJson {
 	}
 
 	public Map<String, Object> callConversionApi(JSONObject body){
-		String apiUrl = "http://43.202.44.111:8000/text";
+		String apiUrl = "https://j9b205.p.ssafy.io/ai/text";
 
 		try {
 			HttpURLConnection connection = null;

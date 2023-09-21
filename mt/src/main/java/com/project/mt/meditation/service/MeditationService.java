@@ -48,9 +48,8 @@ public class MeditationService {
 
 	// Meditation 과 Memo 를 CalendarResponseDto 로 변환하는 매핑 메서드
 	private MeditationListResponseDto mapMeditationToResponseDto(Meditation meditation) {
-
 		MeditationListResponseDto meditationListResponseDto = new MeditationListResponseDto(meditation.getMeditationIdx()
-		, meditation.getMember().getMemberIdx(), meditation.getDate(), meditation.getMeditationImage().get(0).getImageUrl());
+		, meditation.getMember().getMemberIdx(), meditation.getDate(), meditation.getMeditationMedia().get(0).getImageUrl());
 
 		return meditationListResponseDto;
 	}
@@ -66,7 +65,6 @@ public class MeditationService {
 
 	public Map<String, Object> getText(String[] imageFileNames) {
 		JSONObject requestBody = useJson.createRequestBody(imageFileNames);
-		System.out.println(requestBody.toJSONString());
 		Map<String, Object> response = useJson.callConversionApi(requestBody);
 		return response;
 	}

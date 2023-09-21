@@ -36,9 +36,5 @@ public class Meditation {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<MeditationImage> meditationImage;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "meditation", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<MeditationAudio> meditationAudio;
+	private List<MeditationMedia> meditationMedia;
 }

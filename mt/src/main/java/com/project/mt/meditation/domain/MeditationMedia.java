@@ -14,24 +14,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 @Entity
-@Table(name = "meditation_audio")
+@Table(name = "meditation_media")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
-public class MeditationAudio {
-
+public class MeditationMedia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "audio_idx")
-	private Long audioIdx;
+	@Column(name = "media_idx")
+	private Long mediaIdx;
 
 	@ManyToOne
 	@JoinColumn(name = "meditation_idx")
 	private Meditation meditation;
+
+	@Column(name = "image_url")
+	private String imageUrl;
 
 	@Column(name = "audio_url")
 	private String audioUrl;
