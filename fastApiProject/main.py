@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-import uvicorn
 from aiohttp import ClientError
 from fastapi import FastAPI
 
@@ -22,13 +21,35 @@ dotenv.load_dotenv()
 
 app = FastAPI()
 
+from database import engineconn
+
+import models
+
+# from models import MeditationAudio
+
+app = FastAPI()
+
+dotenv.load_dotenv()
+
+client_s3 = boto3.client(
+    's3',
+    aws_access_key_id=os.getenv("CREDENTIALS_ACCESS_KEY"),
+    aws_secret_access_key=os.getenv("CREDENTIALS_SECRET_KEY")
+)
+
+engine = engineconn()
+session = engine.sessionmaker()
+
+class Audio(BaseModel):
+    audioName: str
 
 class ImageURLRequest(BaseModel):
+    meditationIdx: int
     images: List[str]
 
 
 @app.post("/ai/text")
-async def ipynb(imageRequest: ImageURLRequest):
+def ipynb(imageRequest: ImageURLRequest):
     resultList = []
     # IPython 노트북 파일 경로 설정
     ipynb_file_path = "ipynb/image_chatgpt.ipynb"
@@ -62,32 +83,35 @@ async def ipynb(imageRequest: ImageURLRequest):
             elif 'data' in output and 'text/plain' in output['data']:
                 result += output['data']['text/plain']
 
-        resultList.append(result)
+        # resultList.append(result)
+
+        # 명상용 텍스트 -> 음성
+
+        # 음성파일 프로젝트에 저장
+
+        # saveAudio(음성파일명) 호출
+        audioUrl = saveAudioAtS3()
+
+        saveMeditationAudioUrlAtDB(audioUrl, imageRequest.meditationIdx)
 
     return {"message": resultList}
 
-
-import boto3
-
-def s3_connection():
+def saveAudioAtS3(audio : Audio):
     try:
-        # s3 클라이언트 생성
-        s3 = boto3.client(
-            service_name="s3",
-            region_name="ap-northeast-2",
-            aws_access_key_id="AKIAYJ4UAMZIK2UJGZF7",
-            aws_secret_access_key="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",
+        client_s3.upload_file(
+            "./"+audio.audioName,
+            os.getenv("S3_BUCKET"),
+            "audio/" + audio.audioName,
+            ExtraArgs={'ContentType': 'audio/mp3'}
         )
+
+        return os.getenv("S3_URL") + audio.audioName
+    except ClientError as e:
+        print(f'Credential error => {e}')
     except Exception as e:
-        print(e)
-    else:
-        print("s3 bucket connected!")
-        return s3
+        print(f"Another error => {e}")
 
-
-s3 = s3_connection()
-
-try:
-    s3.upload_file("{로컬에서 올릴 파일이름}","{버킷 이름}","{버킷에 저장될 파일 이름}")
-except Exception as e:
-    print(e)
+def saveMeditationAudioUrlAtDB(audioUrl, meditationIdx):
+    db_meditationAudio = models.MeditationAudio(meditation_idx=meditationIdx, audio_url=audioUrl)
+    session.add(db_meditationAudio)
+    session.commit()
