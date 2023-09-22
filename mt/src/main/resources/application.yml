@@ -17,6 +17,11 @@ spring:
       hibernate:
         format_sql: true
 
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
 # Social Login
 jwt:
   secret-key: ${JWT_SECRET_KEY}
