@@ -91,6 +91,9 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # fileName.append("파일명")
 
+    fileName.append("test1.mp3")
+    fileName.append("test2.mp3")
+
     return {"audios": saveAudioAtS3(fileName)}
 
 # @app.post("/ai/audio")
@@ -112,7 +115,7 @@ def saveAudioAtS3(audio):
             )
 
             # 로컬에 저장되어있는 음성파일 삭제
-            os.remove("./audio/" + a)
+            # os.remove("./audio/" + a)
 
             audioUrl.append(os.getenv("S3_URL") + "/" + a)
 
