@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.mt.fileupload.config.AwsS3Uploader;
+import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -40,8 +41,8 @@ public class MeditationController {
 		return ResponseEntity.ok(response);
 	}
 
-//	@GetMapping("/{meditationIdx}")
-//	public ResponseEntity<?> findMeditationByMeditationIdx(@PathVariable("meditationIdx") Long meditationIdx) {
-//
-//	}
+	@GetMapping("/{meditationIdx}")
+	public ResponseEntity<?> findMeditationByMeditationIdx(@PathVariable("meditationIdx") Long meditationIdx) {
+		return ResponseEntity.ok(meditationService.findMeditationByMeditationIdx(meditationIdx));
+	}
 }

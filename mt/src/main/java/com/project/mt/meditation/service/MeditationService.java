@@ -10,6 +10,8 @@ import com.project.mt.exception.ErrorCode;
 import com.project.mt.exception.RestApiException;
 import com.project.mt.meditation.domain.MeditationMedia;
 import com.project.mt.meditation.dto.response.MeditationListResponseDto;
+import com.project.mt.meditation.dto.response.MeditationMediaResponseDto;
+import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.repository.MeditationMediaRepository;
 import com.project.mt.member.domain.Member;
 import com.project.mt.member.repository.MemberRepository;
@@ -18,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.mt.meditation.repository.MeditationRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.mt.fileupload.util.UseJson;
@@ -33,6 +37,55 @@ public class MeditationService {
 
     @Autowired
     private UseJson useJson;
+
+    public Long getMedia(Long memberIdx, String[] imageUrl) {
+        Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
+
+        JSONObject requestBody = useJson.createRequestBody(memberIdx, imageUrl);
+        Map<String, List<String>> response = useJson.callConversionApi(requestBody);
+
+        String[] audioUrl = new String[imageUrl.length];
+
+        List<String> responseAudio = response.get("audios");
+
+        Meditation meditation = meditationRepository.save(Meditation.builder()
+            .member(member)
+            .build());
+
+        List<MeditationMedia> meditationMediaList = new ArrayList<>();
+
+        for (int i = 0; i < audioUrl.length; i++) {
+            audioUrl[i] = responseAudio.get(i);
+            meditationMediaList.add(MeditationMedia.builder()
+                .meditation(meditation)
+                .audioUrl(audioUrl[i])
+                .imageUrl(imageUrl[i])
+                .build());
+        }
+
+        meditationMediaRepository.saveAll(meditationMediaList);
+
+        return meditation.getMeditationIdx();
+    }
+
+    public MeditationResponseDto findMeditationByMeditationIdx(Long meditationIdx) {
+        Meditation meditation = meditationRepository.findByMeditationIdx(meditationIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEDITATION_NOT_FOUND));
+
+        List<MeditationMediaResponseDto> meditationMediaResponseDto = meditation.getMeditationMedia()
+            .stream()
+            .map(this::mapMeditationMediaToResponseDto)
+            .collect(Collectors.toList());
+
+        return new MeditationResponseDto(meditationIdx, meditation.getMember().getMemberIdx(), meditation.getDate(), meditationMediaResponseDto);
+    }
+
+    // Meditation 에서 MeditationMedia 를 MeditationMediaResponseDto 로 변환하는 매핑 메서드
+    private MeditationMediaResponseDto mapMeditationMediaToResponseDto(MeditationMedia meditationMedia) {
+        MeditationMediaResponseDto meditationMediaResponseDto
+            = new MeditationMediaResponseDto(meditationMedia.getImageUrl(), meditationMedia.getAudioUrl());
+
+        return meditationMediaResponseDto;
+    }
 
     public List<MeditationListResponseDto> findMeditationByMemberIdx(Long memberIdx) {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
@@ -51,35 +104,5 @@ public class MeditationService {
                 , meditation.getMember().getMemberIdx(), meditation.getDate(), meditation.getMeditationMedia().get(0).getImageUrl());
 
         return meditationListResponseDto;
-    }
-
-    public Long getMedia(Long memberIdx, String[] imageUrl) {
-        Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
-
-        JSONObject requestBody = useJson.createRequestBody(memberIdx, imageUrl);
-        Map<String, List<String>> response = useJson.callConversionApi(requestBody);
-
-        String[] audioUrl = new String[imageUrl.length];
-
-        List<String> responseAudio = response.get("audios");
-
-        Meditation meditation = meditationRepository.save(Meditation.builder()
-                .member(member)
-                .build());
-
-        List<MeditationMedia> meditationMediaList = new ArrayList<>();
-
-        for (int i = 0; i < audioUrl.length; i++) {
-            audioUrl[i] = responseAudio.get(i);
-			meditationMediaList.add(MeditationMedia.builder()
-                    .meditation(meditation)
-                    .audioUrl(audioUrl[i])
-                    .imageUrl(imageUrl[i])
-                    .build());
-        }
-
-		meditationMediaRepository.saveAll(meditationMediaList);
-
-        return meditation.getMeditationIdx();
     }
 }
