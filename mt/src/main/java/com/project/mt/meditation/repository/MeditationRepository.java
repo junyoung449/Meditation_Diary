@@ -11,5 +11,6 @@ import com.project.mt.member.domain.Member;
 
 @Repository
 public interface MeditationRepository extends JpaRepository<Meditation, Long> {
-	 List<Meditation> findMeditationsByMember(Member member);
+	Optional<Meditation> findByMeditationIdx(Long meditationIdx);
+	List<Meditation> findMeditationsByMember(Member member);
 }

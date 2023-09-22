@@ -14,6 +14,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,18 +35,16 @@ public class UseJson {
 			images.add(imageUrl[i]);
 		}
 
-		body.put("memberIdx", memberIdx);
 		body.put("images", images);
 
 		return body;
 	}
 
 	public Map<String, List<String>> callConversionApi(JSONObject body){
-		String apiUrl = "https://j9b205.p.ssafy.io/ai/text";
 
 		try {
 			HttpURLConnection connection = null;
-			URL url = new URL(apiUrl);
+			URL url = new URL("https://j9b205.p.ssafy.io/ai/text");
 
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
