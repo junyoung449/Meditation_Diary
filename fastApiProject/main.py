@@ -91,8 +91,13 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # fileName.append("파일명")
 
-    fileName.append("test1.mp3")
-    fileName.append("test2.mp3")
+    image_count = len(imageRequest.images)
+
+    if image_count == 1:
+        fileName.append("test1.mp3")
+    elif image_count == 2:
+        fileName.append("test1.mp3")
+        fileName.append("test2.mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
 
