@@ -53,4 +53,14 @@ public class MeditationController {
 		response.put("meditationList", meditationService.findMeditationByMemberIdx(memberIdx));
 		return ResponseEntity.ok(response);
 	}
+
+	@DeleteMapping("/{meditationIdx}")
+	public ResponseEntity<?> deleteMeditationByMeditationIdx(@PathVariable("meditationIdx") Long meditationIdx) {
+		Map<String, String> response = new HashMap<>();
+
+		if (meditationService.deleteMeditationByMeditationIdx(meditationIdx))
+			response.put("resmsg", "삭제 완료");
+
+		return ResponseEntity.ok(response);
+	}
 }

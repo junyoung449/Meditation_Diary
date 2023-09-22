@@ -104,4 +104,13 @@ public class MeditationService {
 
         return meditationListResponseDto;
     }
+
+    public boolean deleteMeditationByMeditationIdx(Long meditationIdx) {
+        Meditation meditation = meditationRepository.findByMeditationIdx(meditationIdx)
+            .orElseThrow(() -> new RestApiException(ErrorCode.MEDITATION_NOT_FOUND));
+
+        meditationRepository.delete(meditation);
+
+        return true;
+    }
 }
