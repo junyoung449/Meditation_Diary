@@ -18,6 +18,7 @@ function KakaoLogined() {
       console.log('카카오 로그인 성공:', response.data);
       localStorage.setItem('accessToken',response.data.accessToken)
       localStorage.setItem('refreshToken',response.data.refreshToken)
+      localStorage.setItem('islogined', true)
       window.location.href = 'https://j9b205.p.ssafy.io/admin'
       // response.data를 이용하여 로그인 결과를 처리하세요.
     })
