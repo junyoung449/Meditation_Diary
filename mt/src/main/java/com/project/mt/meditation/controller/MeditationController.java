@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.mt.fileupload.config.AwsS3Uploader;
+import com.project.mt.meditation.dto.response.MeditationListResponseDto;
 import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
 
@@ -44,5 +45,12 @@ public class MeditationController {
 	@GetMapping("/{meditationIdx}")
 	public ResponseEntity<?> findMeditationByMeditationIdx(@PathVariable("meditationIdx") Long meditationIdx) {
 		return ResponseEntity.ok(meditationService.findMeditationByMeditationIdx(meditationIdx));
+	}
+
+	@GetMapping("/list/{memberIdx}")
+	public ResponseEntity<?> findMeditationByMemberIdx(@PathVariable("memberIdx") Long memberIdx) {
+		Map<String, List<MeditationListResponseDto>> response = new HashMap<>();
+		response.put("meditationList", meditationService.findMeditationByMemberIdx(memberIdx));
+		return ResponseEntity.ok(response);
 	}
 }

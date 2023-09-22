@@ -49,6 +49,3 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
-
-fastapi:
-  url: ${FAST_API_URL}

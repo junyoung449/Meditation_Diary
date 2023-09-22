@@ -1,7 +1,7 @@
 package com.project.mt.meditation.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.project.mt.meditation.repository.MeditationRepository;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.mt.fileupload.util.UseJson;
