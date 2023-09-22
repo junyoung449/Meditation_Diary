@@ -34,6 +34,16 @@ import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 var ps;
 
 function Admin(props) {
+  const isLogined = localStorage.getItem('islogined');
+  if (isLogined === 'true') {
+    // 사용자가 로그인한 상태
+    // 추가적인 작업 수행
+    ;
+  } else {
+    // islogined 항목이 존재하지 않거나 다른 값인 경우
+    // 추가적인 작업 수행
+    window.location.href = '/BeforeLogin'
+  }
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(

@@ -31,6 +31,7 @@ import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
 import KakaoLogined from "./components/Kakao/Kakao";
 import Create from "components/CRUD/Create";
+import BeforeLogin from "layouts/Admin/BeforeLogin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -43,6 +44,7 @@ root.render(
           <Route path="/rtl/*" element={<RTLLayout />} />
           <Route path="/kakao" element={<KakaoLogined />} />
           <Route path="/crud" element={<Create />} />
+          <Route path="/beforelogin" element={<BeforeLogin />} />
           <Route
             path="*"
             element={<Navigate to="/admin/dashboard" replace />}
