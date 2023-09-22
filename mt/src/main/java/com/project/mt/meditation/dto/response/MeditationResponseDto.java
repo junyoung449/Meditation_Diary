@@ -3,7 +3,6 @@ package com.project.mt.meditation.dto.response;
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,6 +13,5 @@ public class MeditationResponseDto {
     private Long meditationIdx;
     private Long memberIdx;
     private Timestamp date;
-    private List<MeditationImageResponseDto> meditationImages;
-    private List<MeditationAudioResponseDto> meditationAudios;
+    private List<MeditationMediaResponseDto> meditationMedia;
 }

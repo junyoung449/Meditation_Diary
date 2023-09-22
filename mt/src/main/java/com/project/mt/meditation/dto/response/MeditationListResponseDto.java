@@ -12,7 +12,6 @@ public class MeditationListResponseDto {
     private Long meditationIdx;
     private Long memberIdx;
     private Timestamp date;
-
     // 썸네일 사진
     private String meditationImage;
 }

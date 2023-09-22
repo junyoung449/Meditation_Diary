@@ -7,12 +7,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,25 +26,25 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UseJson {
 
-	public JSONObject createRequestBody(String[] imageFileNames){
+	public JSONObject createRequestBody(Long memberIdx, String[] imageUrl){
 		JSONObject body = new JSONObject();
 
 		JSONArray images = new JSONArray(); // JSONArray로 변경
 
-		for (int i = 0 ; i < imageFileNames.length ; i++) {
-			images.add(imageFileNames[i]);
+		for (int i = 0 ; i < imageUrl.length ; i++) {
+			images.add(imageUrl[i]);
 		}
 
 		body.put("images", images);
+
 		return body;
 	}
 
-	public Map<String, Object> callConversionApi(JSONObject body){
-		String apiUrl = "http://43.202.44.111:8000/text";
+	public Map<String, List<String>> callConversionApi(JSONObject body){
 
 		try {
 			HttpURLConnection connection = null;
-			URL url = new URL(apiUrl);
+			URL url = new URL("https://j9b205.p.ssafy.io/ai/text");
 
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
@@ -68,7 +71,7 @@ public class UseJson {
 			String text = sb.toString();
 
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> map = mapper.readValue(text, Map.class);
+			Map<String, List<String>> map = mapper.readValue(text, Map.class);
 
 			return map;
 		} catch (ProtocolException e){

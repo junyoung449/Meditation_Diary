@@ -1,37 +1,48 @@
 package com.project.mt.meditation.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.project.mt.fileupload.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.project.mt.fileupload.config.AwsS3Uploader;
-import com.project.mt.meditation.dto.request.MeditationRequestDto;
 import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-@RestController("/api/meditaion")
 @CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/api/meditation")
 @RequiredArgsConstructor
 public class MeditationController {
 
 	private final MeditationService meditationService;
-	private final FileUploadService fileUploadService;
-	private AwsS3Uploader awsS3Uploader;
+	private final AwsS3Uploader awsS3Uploader;
 
-	@PostMapping
-	public void save(@RequestBody MeditationRequestDto requestDto) throws IOException {
-		String[] imageFileNames = awsS3Uploader.upload(requestDto.getImages(), "image");
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> save(@RequestParam List<MultipartFile> images,
+								  @RequestParam Long memberIdx) throws IOException {
+		Map<String, Object> response = new HashMap<>();
 
-		fileUploadService.getText(imageFileNames);
+		String[] imageUrl = awsS3Uploader.upload(images, "image");
+
+		Long meditationIdx = meditationService.getMedia(memberIdx, imageUrl);
+
+		response.put("meditationIdx", meditationIdx);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{meditationIdx}")
+	public ResponseEntity<?> findMeditationByMeditationIdx(@PathVariable("meditationIdx") Long meditationIdx) {
+		return ResponseEntity.ok(meditationService.findMeditationByMeditationIdx(meditationIdx));
 	}
 }
