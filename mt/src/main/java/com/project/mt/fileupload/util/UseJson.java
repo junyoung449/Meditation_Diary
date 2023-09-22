@@ -44,7 +44,7 @@ public class UseJson {
 
 		try {
 			HttpURLConnection connection = null;
-			URL url = new URL("http://localhost:8000/ai/text");
+			URL url = new URL("https://j9b205.p.ssafy.io/ai/text");
 
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
