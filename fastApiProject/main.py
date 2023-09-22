@@ -22,10 +22,6 @@ dotenv.load_dotenv()
 
 app = FastAPI()
 
-from database import engineconn
-
-import models
-
 app = FastAPI()
 
 dotenv.load_dotenv()
@@ -40,7 +36,7 @@ class Audio(BaseModel):
     audioName: List[str]
 
 class ImageURLRequest(BaseModel):
-    meditationIdx: int
+    # meditationIdx: int
     images: List[str]
 
 
@@ -55,6 +51,8 @@ def ipynb(imageRequest: ImageURLRequest):
     # IPython 노트북 파일을 읽기
     with open(ipynb_file_path, 'r', encoding='utf-8') as nb_file:
         notebook = nbformat.read(nb_file, as_version=4)
+
+    print(imageRequest.images)
 
     # 매개변수 전달
     for image in imageRequest.images:
@@ -83,18 +81,19 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # 명상용 텍스트 -> 음성
 
+
         # 음성파일 프로젝트에 저장
         file_path = "./audio/" + "파일명"
 
         # 파일 저장 (UploadFile -> 실제 저장할 파일)
-        with file_path.open("wb") as f:
-            f.write(UploadFile.file.read())
+        # with file_path.open("wb") as f:
+        #     f.write(UploadFile.file.read())
 
-        fileName.append("파일명")
+        # fileName.append("파일명")
 
     return {"audios": saveAudioAtS3(fileName)}
 
-@app.post("/ai/audio")
+# @app.post("/ai/audio")
 def saveAudioAtS3(audio):
     audioUrl = []
 
