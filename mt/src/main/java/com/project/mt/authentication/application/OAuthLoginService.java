@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 public class OAuthLoginService {
 
     private final MemberRepository memberRepository;
-
     private final AuthTokensGenerator authTokensGenerator;
 
     // 각 서비스 소셜의 서버에 accessToken, refreshToken 요청을 담당
@@ -25,8 +24,8 @@ public class OAuthLoginService {
 
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long memberId = findOrCreateMember(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberId);
+        Long memberIdx = findOrCreateMember(oAuthInfoResponse);
+        return authTokensGenerator.generate(memberIdx);
     }
 
     /**

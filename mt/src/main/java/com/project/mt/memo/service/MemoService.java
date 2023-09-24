@@ -1,6 +1,7 @@
 package com.project.mt.memo.service;
 
-import com.project.mt.exception.NotFoundException;
+import com.project.mt.exception.ErrorCode;
+import com.project.mt.exception.RestApiException;
 import com.project.mt.member.domain.Member;
 import com.project.mt.member.repository.MemberRepository;
 import com.project.mt.memo.domain.Memo;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,13 +41,13 @@ public class MemoService {
     }
 
      public MemoResponseDto findMemoByMemoIdx(Long memoIdx) {
-         Memo memo = memoRepository.findMemoById(memoIdx).orElseThrow(() -> new NotFoundException(NotFoundException.MEMO_NOT_FOUND));
+         Memo memo = memoRepository.findMemoById(memoIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMO_NOT_FOUND));
          return new MemoResponseDto(memo.getId(), memo.getMember().getMemberIdx(), memo.getContent(), memo.getDate());
      }
 
      public MemoResponseDto saveMemo(MemoRequestDto memoRequestDto) {
          Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
-                 -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+                 -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
          Memo memo = memoRepository.save(Memo.builder()
                  .content(memoRequestDto.getContent())
@@ -59,7 +59,7 @@ public class MemoService {
 
      public MemoResponseDto modifyMemo(MemoRequestDto memoRequestDto) {
          Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
-                 -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+                 -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
          try {
              Memo memo = memoRepository.save(Memo.builder()
@@ -71,7 +71,7 @@ public class MemoService {
 
              return new MemoResponseDto(memo.getId(), memo.getMember().getMemberIdx(), memo.getContent(), memo.getDate());
          } catch (Exception e) {
-             throw new NotFoundException(NotFoundException.MEMO_NOT_FOUND);
+             throw new RestApiException(ErrorCode.MEMO_NOT_FOUND);
          }
      }
 
