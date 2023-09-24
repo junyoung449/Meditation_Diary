@@ -29,7 +29,9 @@ public class MemoService {
 
     @Transactional
     public List<MemoResponseDto> findMemberMemoList(Long memberIdx) {
-        List<Memo> memberMemo = memoRepository.findMemberMemo(memberIdx);
+        Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
+
+        List<Memo> memberMemo = memoRepository.findMemosByMember(member);
 
         List<MemoResponseDto> result = memberMemo.stream()
                 .map(memo -> MemoResponseDto.builder()
