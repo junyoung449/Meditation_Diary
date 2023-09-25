@@ -1,10 +1,12 @@
 package com.project.mt.calendar.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.project.mt.calendar.dto.request.CalendarRequestDto;
 import com.project.mt.calendar.dto.response.CalendarResponseDto;
+
 import com.project.mt.exception.ErrorCode;
 import com.project.mt.exception.RestApiException;
 import com.project.mt.meditation.domain.Meditation;
@@ -26,13 +28,13 @@ public class CalendarService {
 	private final MemoRepository memoRepository;
 	private final MemberRepository memberRepository;
 
-    public List<CalendarResponseDto> findMeditationsByMember(CalendarRequestDto calendarRequestDto) {
-        Member member = memberRepository.findMemberByMemberIdx(calendarRequestDto.getMemberIdx()).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
+    public List<CalendarResponseDto> findMeditationsAndMemoByMember(Long memberIdx) {
+        Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
 		List<Meditation> meditationResponse =  meditationRepository.findMeditationsByMember(member);
 		if (meditationResponse == null || meditationResponse.isEmpty()) throw new RestApiException(ErrorCode.MEDITATION_NOT_FOUND);
 
-		List<Memo> memoResponse = memoRepository.findMemberMemo(member.getMemberIdx());
+		List<Memo> memoResponse = memoRepository.findMemosByMember(member);
 		if (memoResponse == null || memoResponse.isEmpty()) throw new RestApiException(ErrorCode.MEMO_NOT_FOUND);
 
 		return mapMeditationAndMemoToResponseDto(meditationResponse, memoResponse);
@@ -43,14 +45,14 @@ public class CalendarService {
 		List<CalendarResponseDto> responseDto = new ArrayList<>();
 
 		for (int i = 0 ; i < memoResponse.size() ; i++) {
-			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(meditationResponse.get(i).getDate()
-					, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
+			Date date = new Date(meditationResponse.get(i).getDate().getTime());
 
+			int month = date.getMonth() + 1;
+			int day = date.getDate();
+			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(month, day, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
 			responseDto.add(calendarResponseDto);
 		}
 
 		return responseDto;
 	}
-
-
 }

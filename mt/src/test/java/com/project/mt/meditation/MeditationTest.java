@@ -1,5 +1,5 @@
 // package com.project.mt.meditation;
-//
+// import com.project.mt.meditation.dto.request.MeditationRequestDto;
 // import com.project.mt.meditation.dto.response.MeditationListResponseDto;
 // import com.project.mt.meditation.service.MeditationService;
 // import com.project.mt.member.domain.Member;

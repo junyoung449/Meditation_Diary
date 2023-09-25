@@ -1,6 +1,5 @@
 package com.project.mt.exception;
 
-import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -18,3 +17,4 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
     }
 }
+

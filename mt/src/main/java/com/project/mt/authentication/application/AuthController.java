@@ -1,5 +1,8 @@
 package com.project.mt.authentication.application;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.mt.authentication.domain.AuthTokens;
 import com.project.mt.authentication.infra.kakao.KakaoLoginParams;
+import com.project.mt.member.dto.response.MemberResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +35,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("/kakao")
-    public ResponseEntity<AuthTokens> loginKakao(@RequestParam("code") String code) {
+    public ResponseEntity<?> loginKakao(@RequestParam("code") String code) {
         KakaoLoginParams params = new KakaoLoginParams(code);
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }

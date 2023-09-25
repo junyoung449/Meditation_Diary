@@ -20,13 +20,15 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/{memberIdx}")
+    public ResponseEntity<?> findMemberByMemberIdx(@PathVariable Long memberIdx) {
+        return ResponseEntity.ok(memberService.findMemberByMemberIdx(memberIdx));
+    }
 
-     @GetMapping("/{memberIdx}")
-     public ResponseEntity<?> findMemberByMemberIdx(@PathVariable Long memberIdx) {
-         MemberResponseDto memberResponseDto = memberService.findMemberByMemberIdx(memberIdx);
-
-         return ResponseEntity.ok().body(memberResponseDto);
-     }
+    @GetMapping("/logout/{memberIdx}")
+    public ResponseEntity<?> logoutByMemberIdx(@PathVariable Long memberIdx) {
+        return ResponseEntity.ok().body(memberService.logoutByMemberIdx(memberIdx));
+    }
 
     @DeleteMapping("/{memberIdx}")
     public ResponseEntity<Map<String, String>> deleteMemberByMemberIdx(@PathVariable Long memberIdx) {
