@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -30,12 +30,14 @@ import routes from "routes.js";
 
 import logo from "assets/img/react-logo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+import axios from "axios";
 
 var ps;
 
 function Admin(props) {
   const isLogined = localStorage.getItem('islogined');
   if (isLogined === 'true') {
+    console.log('로그인된 상태')
     // 사용자가 로그인한 상태
     // 추가적인 작업 수행
     ;
@@ -44,6 +46,24 @@ function Admin(props) {
     // 추가적인 작업 수행
     window.location.href = '/BeforeLogin'
   }
+  const [meditationData, setMeditationData] = useState([]);
+  useEffect(() => {
+    const memberIdx = localStorage.getItem('memberIdx');
+    const apiUrl = `/api/meditation/list/${memberIdx}`;
+    axios.get(apiUrl)
+      .then((response) => {
+        // 응답 데이터를 상태 변수에 저장
+        setMeditationData(response.data);
+        console.log(meditationData)
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error('GET 요청 중 오류 발생:', error);
+      });
+  }, [meditationData]);
+  console.log('------------------')
+  console.log(meditationData)
+  console.log('------------------')
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
