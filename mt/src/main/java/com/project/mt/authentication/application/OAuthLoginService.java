@@ -7,6 +7,7 @@ import com.project.mt.authentication.domain.AuthTokensGenerator;
 import com.project.mt.authentication.domain.oauth.OAuthInfoResponse;
 import com.project.mt.authentication.domain.oauth.OAuthLoginParams;
 import com.project.mt.authentication.domain.oauth.RequestOAuthInfoService;
+import com.project.mt.authentication.dto.AuthResponseDto;
 import com.project.mt.member.domain.Member;
 import com.project.mt.member.repository.MemberRepository;
 
@@ -22,10 +23,11 @@ public class OAuthLoginService {
     // 각 서비스 소셜의 서버에 accessToken, refreshToken 요청을 담당
     private final RequestOAuthInfoService requestOAuthInfoService;
 
-    public AuthTokens login(OAuthLoginParams params) {
+    public AuthResponseDto login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long memberIdx = findOrCreateMember(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberIdx);
+
+        return new AuthResponseDto(memberIdx, authTokensGenerator.generate(memberIdx));
     }
 
     /**
