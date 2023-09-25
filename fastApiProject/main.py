@@ -1,3 +1,7 @@
+# ElevenLabs 실행용
+
+import requests
+
 # -*- coding: utf-8 -*-
 import os
 
@@ -5,20 +9,28 @@ from aiohttp import ClientError
 from fastapi import FastAPI, File, UploadFile
 from pathlib import Path
 
+
+# image_chatgpt
+
+from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
+from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
+from clarifai_grpc.grpc.api.status import status_code_pb2
+
+
+import openai
+
+import dotenv
+import os
+
 # ipynb 실행용
-import nbformat
-from nbconvert import PythonExporter
-from nbconvert.preprocessors import ExecutePreprocessor
+# import nbformat
+# from nbconvert import PythonExporter
+# from nbconvert.preprocessors import ExecutePreprocessor
+import boto3
 
 from pydantic import BaseModel
 
 from typing import List
-
-import boto3
-
-import dotenv
-
-import requests
 
 from pydub import AudioSegment
 
@@ -28,6 +40,10 @@ dotenv.load_dotenv()
 app = FastAPI()
 
 dotenv.load_dotenv()
+
+OPENAI_YOUR_KEY = os.getenv("CHATGPT_API_KEY")
+openai.api_key = OPENAI_YOUR_KEY
+
 
 client_s3 = boto3.client(
     's3',
@@ -50,67 +66,125 @@ def ipynb(imageRequest: ImageURLRequest):
     audioUrl = []
     fileName = []
 
-    # IPython 노트북 파일 경로 설정
-    ipynb_file_path = "ipynb/image_chatgpt.ipynb"
-
-    # IPython 노트북 파일을 읽기
-    with open(ipynb_file_path, 'r', encoding='utf-8') as nb_file:
-        notebook = nbformat.read(nb_file, as_version=4)
+    PAT = os.getenv("CLARIFAI_API_KEY")
+    USER_ID = 'clarifai'
+    APP_ID = 'main'
+    MODEL_ID = 'general-image-recognition'
+    MODEL_VERSION_ID = 'aa7f35c01e0642fda5cf400f543e7c40'
+    
 
     print(imageRequest.images)
-
+    result = ""
     # 매개변수 전달
     for image in imageRequest.images:
-        for cell in notebook.cells:
-            if cell.cell_type == 'code':
-                cell.source = cell.source.replace("{{ imageUrl }}", image)
+        
+        IMAGE_URL = image
+        
+        message = "해당 단어를 결합해 감성적인 문장을 만들어줘. 명상할 때 읽어줄 문장이고 해당 단어는 그날 명상하는 사람이 찍은 사진에 나온 단어야. 그 사람의 입장을 생각해서 만들어줘. 모든 단어를 활용할 필요는 없어. 이런 느낌을 느낄 수 있지 않았을까 하는 공감대를 형성하는 방향으로 문장을 작성해줘. 단어 뒤에 나온 숫자는 사진에서 자동으로 인식한 단어의 인식률이야. 그리고 영어로 답변해줘"
 
-        # Python 코드로 변환
-        python_exporter = PythonExporter()
-        python_code, _ = python_exporter.from_notebook_node(notebook)
+        channel = ClarifaiChannel.get_grpc_channel()
+        stub = service_pb2_grpc.V2Stub(channel)
 
-        # Python 코드 실행 및 결과 추출
-        exec_preprocessor = ExecutePreprocessor(timeout=600)
-        exec_preprocessor.preprocess(notebook, {'metadata': {'path': './'}})
+        metadata = (('authorization', 'Key ' + PAT),)
 
-        # 실행 결과 가져오기
-        cell_outputs = notebook.cells[-1].outputs
+        userDataObject = resources_pb2.UserAppIDSet(user_id=USER_ID, app_id=APP_ID)
 
-        # 결과를 문자열로 가져옴
-        result = ""
-        for output in cell_outputs:
-            if 'text' in output:
-                result += output['text']
-            elif 'data' in output and 'text/plain' in output['data']:
-                result += output['data']['text/plain']
+        post_model_outputs_response = stub.PostModelOutputs(
+            service_pb2.PostModelOutputsRequest(
+                user_app_id=userDataObject,
+                model_id=MODEL_ID,
+                version_id=MODEL_VERSION_ID, 
+                inputs=[
+                    resources_pb2.Input(
+                        data=resources_pb2.Data(
+                            image=resources_pb2.Image(
+                                url=IMAGE_URL
+                            )
+                        )
+                    )
+                ]
+            ),
+            metadata=metadata
+        )
+
+        if post_model_outputs_response.status.code != status_code_pb2.SUCCESS:
+            print(post_model_outputs_response.status)
+            raise Exception("Post model outputs failed, status: " + post_model_outputs_response.status.description)
+
+        output = post_model_outputs_response.outputs[0]
+
+        print("Predicted concepts:")
+        for concept in output.data.concepts:
+            print("%s %.2f" % (concept.name, concept.value))
+            message += concept.name + " " + str(concept.value) + "\n"
 
 
-        print(result)
-        CHUNK_SIZE = 1024
-        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+        MODEL = "gpt-3.5-turbo"
+        USER_INPUT_MSG = message
+        message2 = ""
 
-        headers = {
-            "Accept": "audio/mpeg",
-            "Content-Type": "application/json",
-            "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
+        response = openai.ChatCompletion.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": USER_INPUT_MSG},
+                # {"role": "assistant", "content": "Who's there?"},
+            ],
+            temperature=0.5,
+            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
+        )
+
+        message2 += response['choices'][0]['message']['content']
+
+        # response['choices'][0]['message']['content']
+
+
+        message2 += " 이걸 한국말로 번역해줘."
+
+
+        USER_INPUT_MSG2 = message2
+        MODEL2 = "gpt-3.5-turbo-0613"
+
+        response2 = openai.ChatCompletion.create(
+            model=MODEL2,
+            messages=[
+                {"role": "system", "content": "You are a kind assistant."},
+                {"role": "user", "content": USER_INPUT_MSG2},
+                {"role": "assistant", "content": "You must answer continuously."},
+            ],
+            temperature=0.6,
+            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
+        )
+
+        result += f"{response2['choices'][0]['message']['content']} "
+    
+
+    CHUNK_SIZE = 1024
+    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
+    }
+
+    elevenlabs_data = {
+        "text": result,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.6,
+            "similarity_boost": 1,
+            "style": 0,
+            "use_speaker_boost": 'true'
         }
+    }
+    response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
+    with open('./audio/output.mp3', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+            if chunk:
+                f.write(chunk)
 
-        elevenlabs_data = {
-            "text": result,
-            "model_id": "eleven_multilingual_v2",
-            "voice_settings": {
-                "stability": 0.35,
-                "similarity_boost": 0.75,
-                "style": 0.27
-            }
-        }
-        response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
-        with open('./audio/output.mp3', 'wb') as f:
-            for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-                if chunk:
-                    f.write(chunk)
-
-        fileName.append("파일명")
+    fileName.append("파일명")
 
     image_count = len(imageRequest.images)
 
