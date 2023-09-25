@@ -18,8 +18,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthTokensGenerator {
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5;            // 5분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 1;  // 1일
+//    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10;            // 10분
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 10;   // 10일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 20;  // 20일
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -38,6 +39,7 @@ public class AuthTokensGenerator {
 
     public String generateAccessToken(String subject) {
         long now = (new Date()).getTime();
+
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 
         return jwtTokenProvider.generate(subject, accessTokenExpiredAt);
