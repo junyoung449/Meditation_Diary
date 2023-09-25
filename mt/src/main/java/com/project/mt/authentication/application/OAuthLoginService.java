@@ -27,7 +27,7 @@ public class OAuthLoginService {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long memberIdx = findOrCreateMember(oAuthInfoResponse);
 
-        return new AuthResponseDto(memberIdx, authTokensGenerator.generate(memberIdx));
+        return new AuthResponseDto(memberIdx, authTokensGenerator.generate(memberIdx).getAccessToken());
     }
 
     /**
