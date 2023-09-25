@@ -18,11 +18,12 @@ import boto3
 
 import dotenv
 
+from pydub import AudioSegment
+AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
 dotenv.load_dotenv()
 
 app = FastAPI()
 
-app = FastAPI()
 
 dotenv.load_dotenv()
 
@@ -86,8 +87,6 @@ def ipynb(imageRequest: ImageURLRequest):
         file_path = "./audio/" + "파일명"
 
         # 파일 저장 (UploadFile -> 실제 저장할 파일)
-        # with file_path.open("wb") as f:
-        #     f.write(UploadFile.file.read())
 
         # fileName.append("파일명")
 
@@ -129,3 +128,26 @@ def saveAudioAtS3(audio):
         print(f'Credential error => {e}')
     except Exception as e:
         print(f"Another error => {e}")
+
+@app.get("/ai/back")
+def makeBackGroundMusic():
+
+    # 배경 음악 파일 로드
+    background_music = AudioSegment.from_mp3("./audio/back.mp3")
+
+    # 배경 음악 음성 크기를 17dB 낮추기 (원하는 값으로 변경 가능)
+    # lowered_volume_music = background_music - 17
+
+    # lowered_volume_music.export("./audio/back_lowered.mp3", format="mp3")
+
+    # 원본 mp3 파일 로드
+    # original_audio = AudioSegment.from_mp3("./audio/"+audioName+".mp3")
+    original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
+
+    # 배경 음악과 원본 오디오 합치기
+    output_audio = original_audio.overlay(background_music)
+
+    # 결과를 새 파일로 저장
+    output_audio.export("output_audio.mp3", format="mp3")
+
+    print("배경 음악이 추가된 오디오를 저장했습니다.")
