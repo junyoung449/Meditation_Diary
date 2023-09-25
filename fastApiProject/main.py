@@ -7,15 +7,12 @@ import os
 
 from aiohttp import ClientError
 from fastapi import FastAPI, File, UploadFile
-from pathlib import Path
-
 
 # image_chatgpt
 
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
-
 
 import openai
 
@@ -32,10 +29,17 @@ from pydantic import BaseModel
 
 from typing import List
 
+import boto3
+
+import dotenv
+
+import requests
+
+import secrets
+
 from pydub import AudioSegment
 
 AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
-dotenv.load_dotenv()
 
 app = FastAPI()
 
@@ -43,7 +47,6 @@ dotenv.load_dotenv()
 
 OPENAI_YOUR_KEY = os.getenv("CHATGPT_API_KEY")
 openai.api_key = OPENAI_YOUR_KEY
-
 
 client_s3 = boto3.client(
     's3',
@@ -57,7 +60,6 @@ class Audio(BaseModel):
 
 
 class ImageURLRequest(BaseModel):
-    # meditationIdx: int
     images: List[str]
 
 
@@ -71,13 +73,13 @@ def ipynb(imageRequest: ImageURLRequest):
     APP_ID = 'main'
     MODEL_ID = 'general-image-recognition'
     MODEL_VERSION_ID = 'aa7f35c01e0642fda5cf400f543e7c40'
-    
 
     print(imageRequest.images)
+
     result = ""
     # 매개변수 전달
     for image in imageRequest.images:
-        
+
         IMAGE_URL = image
         
         message = ""
@@ -93,7 +95,7 @@ def ipynb(imageRequest: ImageURLRequest):
             service_pb2.PostModelOutputsRequest(
                 user_app_id=userDataObject,
                 model_id=MODEL_ID,
-                version_id=MODEL_VERSION_ID, 
+                version_id=MODEL_VERSION_ID,
                 inputs=[
                     resources_pb2.Input(
                         data=resources_pb2.Data(
@@ -118,7 +120,6 @@ def ipynb(imageRequest: ImageURLRequest):
             print("%s %.2f" % (concept.name, concept.value))
             message += concept.name + " " + str(concept.value) + "\n"
 
-
         MODEL = "gpt-3.5-turbo"
         USER_INPUT_MSG = message
         message2 = ""
@@ -140,9 +141,23 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # response['choices'][0]['message']['content']
 
+        message2 += " 이걸 한국말로 번역해줘."
 
-        result += f"{response['choices'][0]['message']['content']} "
-    print(result)
+        USER_INPUT_MSG2 = message2
+        MODEL2 = "gpt-3.5-turbo-0613"
+
+        response2 = openai.ChatCompletion.create(
+            model=MODEL2,
+            messages=[
+                {"role": "system", "content": "You are a kind assistant."},
+                {"role": "user", "content": USER_INPUT_MSG2},
+                {"role": "assistant", "content": "You must answer continuously."},
+            ],
+            temperature=0.6,
+            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
+        )
+
+        result += f"{response2['choices'][0]['message']['content']} "
 
     CHUNK_SIZE = 1024
     elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
@@ -163,21 +178,17 @@ def ipynb(imageRequest: ImageURLRequest):
             "use_speaker_boost": 'false'
         }
     }
+
+    name = secrets.token_hex(nbytes=16)
+
     response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
-    with open('./audio/output.mp3', 'wb') as f:
+    with open("./audio/" + name + ".mp3", 'wb') as f:
         for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
             if chunk:
                 f.write(chunk)
 
-    fileName.append("파일명")
-
-    image_count = len(imageRequest.images)
-
-    if image_count == 1:
-        fileName.append("test1.mp3")
-    elif image_count == 2:
-        fileName.append("test1.mp3")
-        fileName.append("test2.mp3")
+    makeBackGroundMusic(name)
+    fileName.append(name + ".mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
 
@@ -185,11 +196,6 @@ def ipynb(imageRequest: ImageURLRequest):
 # @app.post("/ai/audio")
 def saveAudioAtS3(audio):
     audioUrl = []
-
-    # audio = []
-
-    # audio.append("440Hz-5sec.mp3")
-    # audio.append("1000Hz-5sec.mp3")
 
     try:
         for a in audio:
@@ -201,7 +207,7 @@ def saveAudioAtS3(audio):
             )
 
             # 로컬에 저장되어있는 음성파일 삭제
-            # os.remove("./audio/" + a)
+            os.remove("./audio/" + a)
 
             audioUrl.append(os.getenv("S3_URL") + "/" + a)
 
@@ -213,18 +219,21 @@ def saveAudioAtS3(audio):
 
 
 @app.get("/ai/back")
-def makeBackGroundMusic():
+def makeBackGroundMusic(name):
     # 배경 음악 파일 로드
     background_music = AudioSegment.from_mp3("./audio/back.mp3")
 
     # 원본 mp3 파일 로드
-    # original_audio = AudioSegment.from_mp3("./audio/"+audioName+".mp3")
-    original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
+    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3")
+    # original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
+
+    # 로컬에 있는 mp3 파일 삭제
+    os.remove("./audio/" + name + ".mp3")
 
     # 배경 음악과 원본 오디오 합치기
     output_audio = original_audio.overlay(background_music)
 
     # 결과를 새 파일로 저장
-    output_audio.export("output_audio.mp3", format="mp3")
+    output_audio.export("./audio/" + name + ".mp3", format="mp3")
 
     print("배경 음악이 추가된 오디오를 저장했습니다.")
