@@ -122,7 +122,6 @@ def ipynb(imageRequest: ImageURLRequest):
 
         MODEL = "gpt-3.5-turbo"
         USER_INPUT_MSG = message
-        message2 = ""
 
         response = openai.ChatCompletion.create(
             model=MODEL,
@@ -141,24 +140,11 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # response['choices'][0]['message']['content']
 
-        message2 += " 이걸 한국말로 번역해줘."
 
-        USER_INPUT_MSG2 = message2
-        MODEL2 = "gpt-3.5-turbo-0613"
+        result += f"{response['choices'][0]['message']['content']} "
 
-        response2 = openai.ChatCompletion.create(
-            model=MODEL2,
-            messages=[
-                {"role": "system", "content": "You are a kind assistant."},
-                {"role": "user", "content": USER_INPUT_MSG2},
-                {"role": "assistant", "content": "You must answer continuously."},
-            ],
-            temperature=0.6,
-            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
-        )
-
-        result += f"{response2['choices'][0]['message']['content']} "
-
+    print(result)
+    
     CHUNK_SIZE = 1024
     elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
 
