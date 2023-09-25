@@ -175,7 +175,7 @@ def ipynb(imageRequest: ImageURLRequest):
             "stability": 0.6,
             "similarity_boost": 1,
             "style": 0,
-            "use_speaker_boost": 'true'
+            "use_speaker_boost": 'false'
         }
     }
     response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
