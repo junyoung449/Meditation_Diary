@@ -29,7 +29,6 @@ from pydantic import BaseModel
 
 from typing import List
 
-<< << << < HEAD
 import boto3
 
 import dotenv
@@ -38,9 +37,6 @@ import requests
 
 import secrets
 
-== == == =
->> >> >> > 9
-f055d024792494b780c99d74eed6613f14799a3
 from pydub import AudioSegment
 
 AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
