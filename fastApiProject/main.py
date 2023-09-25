@@ -3,7 +3,6 @@ import os
 
 from aiohttp import ClientError
 from fastapi import FastAPI, File, UploadFile
-from pathlib import Path
 
 # ipynb 실행용
 import nbformat
@@ -20,10 +19,11 @@ import dotenv
 
 import requests
 
+import secrets
+
 from pydub import AudioSegment
 
 AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
-dotenv.load_dotenv()
 
 app = FastAPI()
 
@@ -41,7 +41,6 @@ class Audio(BaseModel):
 
 
 class ImageURLRequest(BaseModel):
-    # meditationIdx: int
     images: List[str]
 
 
@@ -58,6 +57,8 @@ def ipynb(imageRequest: ImageURLRequest):
         notebook = nbformat.read(nb_file, as_version=4)
 
     print(imageRequest.images)
+
+    idx = 1;
 
     # 매개변수 전달
     for image in imageRequest.images:
@@ -104,21 +105,25 @@ def ipynb(imageRequest: ImageURLRequest):
                 "style": 0.27
             }
         }
+
+        name = secrets.token_hex(nbytes=16)
+
         response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
-        with open('./audio/output.mp3', 'wb') as f:
+        with open("./audio/" + name + ".mp3", 'wb') as f:
             for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
                 if chunk:
                     f.write(chunk)
 
-        fileName.append("파일명")
+        makeBackGroundMusic(name)
+        fileName.append(name + ".mp3")
 
     image_count = len(imageRequest.images)
 
-    if image_count == 1:
-        fileName.append("test1.mp3")
-    elif image_count == 2:
-        fileName.append("test1.mp3")
-        fileName.append("test2.mp3")
+    # if image_count == 1:
+    #     fileName.append("test1.mp3")
+    # elif image_count == 2:
+    #     fileName.append("test1.mp3")
+    #     fileName.append("test2.mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
 
@@ -126,11 +131,6 @@ def ipynb(imageRequest: ImageURLRequest):
 # @app.post("/ai/audio")
 def saveAudioAtS3(audio):
     audioUrl = []
-
-    # audio = []
-
-    # audio.append("440Hz-5sec.mp3")
-    # audio.append("1000Hz-5sec.mp3")
 
     try:
         for a in audio:
@@ -142,7 +142,7 @@ def saveAudioAtS3(audio):
             )
 
             # 로컬에 저장되어있는 음성파일 삭제
-            # os.remove("./audio/" + a)
+            os.remove("./audio/" + a)
 
             audioUrl.append(os.getenv("S3_URL") + "/" + a)
 
@@ -154,18 +154,21 @@ def saveAudioAtS3(audio):
 
 
 @app.get("/ai/back")
-def makeBackGroundMusic():
+def makeBackGroundMusic(name):
     # 배경 음악 파일 로드
     background_music = AudioSegment.from_mp3("./audio/back.mp3")
 
     # 원본 mp3 파일 로드
-    # original_audio = AudioSegment.from_mp3("./audio/"+audioName+".mp3")
-    original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
+    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3")
+    # original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
+
+    # 로컬에 있는 mp3 파일 삭제
+    os.remove("./audio/" + name + ".mp3")
 
     # 배경 음악과 원본 오디오 합치기
     output_audio = original_audio.overlay(background_music)
 
     # 결과를 새 파일로 저장
-    output_audio.export("output_audio.mp3", format="mp3")
+    output_audio.export("./audio/" + name + ".mp3", format="mp3")
 
     print("배경 음악이 추가된 오디오를 저장했습니다.")
