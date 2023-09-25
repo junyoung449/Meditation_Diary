@@ -16,6 +16,7 @@
 
 */
 import React from "react";
+import axios from "axios";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 
@@ -43,6 +44,9 @@ function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const handleLogout = () => {
+    axios.get('/api/member/logout/{}')
+  }
   const handleKakaoLogin = () => {
     // 환경 변수에서 값을 가져오기
     const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -179,7 +183,7 @@ function AdminNavbar(props) {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={ handleLogout }>Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>

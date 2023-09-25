@@ -20,7 +20,7 @@ function KakaoLogined() {
       localStorage.setItem('refreshToken',response.data.refreshToken)
       localStorage.setItem('islogined', true)
       localStorage.setItem('memberIdx', response.data.memberIdx)
-      window.location.href = 'https://j9b205.p.ssafy.io/admin'
+      // window.location.href = 'https://j9b205.p.ssafy.io/admin'
       // response.data를 이용하여 로그인 결과를 처리하세요.
     })
     .catch((error) => {
