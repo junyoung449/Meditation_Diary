@@ -8,8 +8,10 @@ import com.project.mt.memo.domain.Memo;
 import com.project.mt.memo.dto.request.MemoRequestDto;
 import com.project.mt.memo.dto.response.MemoResponseDto;
 import com.project.mt.memo.repository.MemoRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,66 +26,70 @@ import java.util.stream.Collectors;
 @Transactional
 public class MemoService {
 
-    private final MemoRepository memoRepository;
-    private final MemberRepository memberRepository;
+	private final MemoRepository memoRepository;
+	private final MemberRepository memberRepository;
 
-    @Transactional
-    public List<MemoResponseDto> findMemberMemoList(Long memberIdx) {
-        List<Memo> memberMemo = memoRepository.findMemberMemo(memberIdx);
+	@Transactional
+	public List<MemoResponseDto> findMemberMemoList(Long memberIdx) {
+		List<Memo> memberMemo = memoRepository.findMemberMemo(memberIdx);
 
-        List<MemoResponseDto> result = memberMemo.stream()
-                .map(memo -> MemoResponseDto.builder()
-                        .memoIdx(memo.getMemoIdx())
-                        .content(memo.getContent())
-                        .date(memo.getDate())
-                        .build())
-                .collect(Collectors.toList());
+		List<MemoResponseDto> result = memberMemo.stream()
+			.map(memo -> MemoResponseDto.builder()
+				.memoIdx(memo.getMemoIdx())
+				.content(memo.getContent())
+				.date(memo.getDate())
+				.build())
+			.collect(Collectors.toList());
 
-        return result;
-    }
+		return result;
+	}
 
-     public MemoResponseDto findMemoByMemoIdx(Long memoIdx) {
-         Memo memo = memoRepository.findMemoByMemoIdx(memoIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMO_NOT_FOUND));
-         return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(), memo.getDate());
-     }
+	public MemoResponseDto findMemoByMemoIdx(Long memoIdx) {
+		Memo memo = memoRepository.findMemoByMemoIdx(memoIdx)
+			.orElseThrow(() -> new RestApiException(ErrorCode.MEMO_NOT_FOUND));
+		return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(),
+			memo.getDate());
+	}
 
-     public MemoResponseDto saveMemo(MemoRequestDto memoRequestDto) {
-         Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
-                 -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
+	public MemoResponseDto saveMemo(MemoRequestDto memoRequestDto) {
+		Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
+			-> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-         Memo memo = memoRepository.save(Memo.builder()
-                 .content(memoRequestDto.getContent())
-                 .member(member)
-                 .build());
+		Memo memo = memoRepository.save(Memo.builder()
+			.content(memoRequestDto.getContent())
+			.member(member)
+			.build());
 
-         return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(), memo.getDate());
-     }
+		return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(),
+			memo.getDate());
+	}
 
-     public MemoResponseDto modifyMemo(MemoRequestDto memoRequestDto) {
-         Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
-                 -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
+	public MemoResponseDto modifyMemo(MemoRequestDto memoRequestDto) {
+		Member member = memberRepository.findMemberByMemberIdx(memoRequestDto.getMemberIdx()).orElseThrow(()
+			-> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-         try {
-             Memo memo = memoRepository.save(Memo.builder()
-                     .memoIdx(memoRequestDto.getMemoIdx())
-                     .content(memoRequestDto.getContent())
-                     .date(Timestamp.valueOf(LocalDateTime.now()))
-                     .member(member)
-                     .build());
+		try {
+			Memo memo = memoRepository.save(Memo.builder()
+				.memoIdx(memoRequestDto.getMemoIdx())
+				.content(memoRequestDto.getContent())
+				.date(Timestamp.valueOf(LocalDateTime.now()))
+				.member(member)
+				.build());
 
-             return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(), memo.getDate());
-         } catch (Exception e) {
-             throw new RestApiException(ErrorCode.MEMO_NOT_MODIFY);
-         }
-     }
+			return new MemoResponseDto(memo.getMemoIdx(), memo.getMember().getMemberIdx(), memo.getContent(),
+				memo.getDate());
+		} catch (Exception e) {
+			throw new RestApiException(ErrorCode.MEMO_NOT_MODIFY);
+		}
+	}
 
-    public boolean deleteMemo(Long memoIdx) {
-        try {
-            memoRepository.deleteById(memoIdx);
-        } catch (Exception e) {
-            throw new RestApiException(ErrorCode.MEMO_NOT_DELETE);
-        }
+	public boolean deleteMemo(Long memoIdx) {
+		try {
+			memoRepository.deleteById(memoIdx);
+		} catch (Exception e) {
+			throw new RestApiException(ErrorCode.MEMO_NOT_DELETE);
+		}
 
-        return true;
-    }
+		return true;
+	}
 }

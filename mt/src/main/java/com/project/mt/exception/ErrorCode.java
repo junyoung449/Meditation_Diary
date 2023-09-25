@@ -16,7 +16,8 @@ public enum ErrorCode {
     /*
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
-    UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "Unauthorized."),
+    UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "헤더에 토큰이 없거나 적합하지 않은 형태입니다."),
+    VALID_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
 
     /*
      * 403 FORBIDDEN: 권한이 없는 사용자의 요청

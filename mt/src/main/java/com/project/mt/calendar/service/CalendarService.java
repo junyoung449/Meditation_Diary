@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.project.mt.calendar.dto.request.CalendarRequestDto;
 import com.project.mt.calendar.dto.response.CalendarResponseDto;
+
 import com.project.mt.exception.ErrorCode;
 import com.project.mt.exception.RestApiException;
 import com.project.mt.meditation.domain.Meditation;
@@ -51,6 +52,4 @@ public class CalendarService {
 
 		return responseDto;
 	}
-
-
 }
