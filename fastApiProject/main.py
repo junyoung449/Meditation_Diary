@@ -80,7 +80,7 @@ def ipynb(imageRequest: ImageURLRequest):
         
         IMAGE_URL = image
         
-        message = "해당 단어를 결합해 감성적인 문장을 만들어줘. 명상할 때 읽어줄 문장이고 해당 단어는 그날 명상하는 사람이 찍은 사진에 나온 단어야. 그 사람의 입장을 생각해서 만들어줘. 모든 단어를 활용할 필요는 없어. 이런 느낌을 느낄 수 있지 않았을까 하는 공감대를 형성하는 방향으로 문장을 작성해줘. 단어 뒤에 나온 숫자는 사진에서 자동으로 인식한 단어의 인식률이야. 그리고 영어로 답변해줘"
+        message = ""
 
         channel = ClarifaiChannel.get_grpc_channel()
         stub = service_pb2_grpc.V2Stub(channel)
@@ -126,38 +126,23 @@ def ipynb(imageRequest: ImageURLRequest):
         response = openai.ChatCompletion.create(
             model=MODEL,
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "존댓말로 작성해. 셰익스피어처럼 표현해줘. 나래이션의 스크립트가 필요해. 그 문단은 이 20개의 단어로 구성되어야 해. 꼭 이 단어를 전부 사용할 필요는 없어. 감성적인 표현이 주가 되어야 해. 한국어로 작성하도록 해."},
                 {"role": "user", "content": USER_INPUT_MSG},
+                {"role": "user", "content": "300글자 이상 500글자 이하가 되도록 문단을 작성해."},
+                {"role": "assistant", "content": "네. 글자수는 300글자 이상 500글자 이하가 되도록 문단을 작성하도록 하겠습니다."},
+                {"role": "user", "content": "시스템 메시지를 다시 언급하지 마. 반드시 존댓말로 작성하도록 해."},
+                {"role": "assistant", "content": "반드시 존댓말로 작성해 드릴게요."},
                 # {"role": "assistant", "content": "Who's there?"},
             ],
-            temperature=0.5,
-            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
+            temperature=0.7,
+            max_tokens=700  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
         )
-
-        message2 += response['choices'][0]['message']['content']
 
         # response['choices'][0]['message']['content']
 
 
-        message2 += " 이걸 한국말로 번역해줘."
-
-
-        USER_INPUT_MSG2 = message2
-        MODEL2 = "gpt-3.5-turbo-0613"
-
-        response2 = openai.ChatCompletion.create(
-            model=MODEL2,
-            messages=[
-                {"role": "system", "content": "You are a kind assistant."},
-                {"role": "user", "content": USER_INPUT_MSG2},
-                {"role": "assistant", "content": "You must answer continuously."},
-            ],
-            temperature=0.6,
-            max_tokens=600  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
-        )
-
-        result += f"{response2['choices'][0]['message']['content']} "
-    
+        result += f"{response['choices'][0]['message']['content']} "
+    print(result)
 
     CHUNK_SIZE = 1024
     elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
