@@ -18,6 +18,9 @@ import boto3
 
 import dotenv
 
+import requests
+
+
 from pydub import AudioSegment
 AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
 dotenv.load_dotenv()
@@ -81,6 +84,32 @@ def ipynb(imageRequest: ImageURLRequest):
                 result += output['data']['text/plain']
 
         # 명상용 텍스트 -> 음성
+        
+        CHUNK_SIZE = 1024
+        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+
+        headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": "ELEVENLABS_API_KEY"
+        }
+
+        elevenlabs_data = {
+        "text": result,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.35,
+            "similarity_boost": 0.75,
+            "style": 0.27,
+            "use_speaker_boost": 'true'
+        }
+        }
+        response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
+        with open('./audio/output.mp3', 'wb') as f:
+            for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+                if chunk:
+                    f.write(chunk)
+
 
 
         # 음성파일 프로젝트에 저장
