@@ -32,10 +32,12 @@ public class CalendarService {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
 		List<Meditation> meditationResponse =  meditationRepository.findMeditationsByMember(member);
-		if (meditationResponse == null || meditationResponse.isEmpty()) throw new RestApiException(ErrorCode.MEDITATION_NOT_FOUND);
+		if (meditationResponse == null || meditationResponse.isEmpty())
+			meditationResponse = new ArrayList<>();
 
 		List<Memo> memoResponse = memoRepository.findMemosByMember(member);
-		if (memoResponse == null || memoResponse.isEmpty()) throw new RestApiException(ErrorCode.MEMO_NOT_FOUND);
+		if (memoResponse == null || memoResponse.isEmpty())
+			memoResponse = new ArrayList<>();
 
 		return mapMeditationAndMemoToResponseDto(meditationResponse, memoResponse);
     }
