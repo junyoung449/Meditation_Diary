@@ -18,12 +18,14 @@ import boto3
 
 import dotenv
 
+import requests
+
 from pydub import AudioSegment
+
 AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
 dotenv.load_dotenv()
 
 app = FastAPI()
-
 
 dotenv.load_dotenv()
 
@@ -33,8 +35,10 @@ client_s3 = boto3.client(
     aws_secret_access_key=os.getenv("CREDENTIALS_SECRET_KEY")
 )
 
+
 class Audio(BaseModel):
     audioName: List[str]
+
 
 class ImageURLRequest(BaseModel):
     # meditationIdx: int
@@ -80,9 +84,33 @@ def ipynb(imageRequest: ImageURLRequest):
             elif 'data' in output and 'text/plain' in output['data']:
                 result += output['data']['text/plain']
 
-        # 명상용 텍스트(result) -> 음성
 
-        # fileName.append("파일명")
+        print(result)
+        CHUNK_SIZE = 1024
+        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+
+        headers = {
+            "Accept": "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
+        }
+
+        elevenlabs_data = {
+            "text": result,
+            "model_id": "eleven_multilingual_v2",
+            "voice_settings": {
+                "stability": 0.35,
+                "similarity_boost": 0.75,
+                "style": 0.27
+            }
+        }
+        response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
+        with open('./audio/output.mp3', 'wb') as f:
+            for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+                if chunk:
+                    f.write(chunk)
+
+        fileName.append("파일명")
 
     image_count = len(imageRequest.images)
 
@@ -93,6 +121,7 @@ def ipynb(imageRequest: ImageURLRequest):
         fileName.append("test2.mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
+
 
 # @app.post("/ai/audio")
 def saveAudioAtS3(audio):
@@ -106,7 +135,7 @@ def saveAudioAtS3(audio):
     try:
         for a in audio:
             client_s3.upload_file(
-                "./audio/"+a,
+                "./audio/" + a,
                 os.getenv("S3_BUCKET"),
                 "audio/" + a,
                 ExtraArgs={'ContentType': 'audio/mp3'}
@@ -123,9 +152,9 @@ def saveAudioAtS3(audio):
     except Exception as e:
         print(f"Another error => {e}")
 
+
 @app.get("/ai/back")
 def makeBackGroundMusic():
-
     # 배경 음악 파일 로드
     background_music = AudioSegment.from_mp3("./audio/back.mp3")
 
