@@ -13,7 +13,8 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 public class CalendarResponseDto {
-	private Timestamp date;
+	private int month;
+	private int day;
 	private Long memoIdx;
 	private Long meditationIdx;
 }
