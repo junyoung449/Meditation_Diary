@@ -80,13 +80,7 @@ def ipynb(imageRequest: ImageURLRequest):
             elif 'data' in output and 'text/plain' in output['data']:
                 result += output['data']['text/plain']
 
-        # 명상용 텍스트 -> 음성
-
-
-        # 음성파일 프로젝트에 저장
-        file_path = "./audio/" + "파일명"
-
-        # 파일 저장 (UploadFile -> 실제 저장할 파일)
+        # 명상용 텍스트(result) -> 음성
 
         # fileName.append("파일명")
 
@@ -134,11 +128,6 @@ def makeBackGroundMusic():
 
     # 배경 음악 파일 로드
     background_music = AudioSegment.from_mp3("./audio/back.mp3")
-
-    # 배경 음악 음성 크기를 17dB 낮추기 (원하는 값으로 변경 가능)
-    # lowered_volume_music = background_music - 17
-
-    # lowered_volume_music.export("./audio/back_lowered.mp3", format="mp3")
 
     # 원본 mp3 파일 로드
     # original_audio = AudioSegment.from_mp3("./audio/"+audioName+".mp3")
