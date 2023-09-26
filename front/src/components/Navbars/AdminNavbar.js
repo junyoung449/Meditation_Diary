@@ -46,14 +46,17 @@ function AdminNavbar(props) {
   const [color, setcolor] = React.useState("navbar-transparent");
   const handleLogout = () => {
     const accessToken = localStorage.getItem('accessToken');
-    const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
-    console.log(accessToken,memberIdx);
-    axios.get(`/api/member/logout/${memberIdx}}`,{
+    const memberIdx = parseInt(localStorage.getItem('memberIdx'), 10);
+    console.log(accessToken, memberIdx);
+    
+    // 중괄호를 문자 그대로 포함시키기 위해 문자열 템플릿을 사용
+    axios.get(`/api/member/logout/${memberIdx}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 추가
-      }}
-      )
+      },
+    });
   }
+  
   const handleKakaoLogin = () => {
     // 환경 변수에서 값을 가져오기
     const clientId = process.env.REACT_APP_CLIENT_ID;
