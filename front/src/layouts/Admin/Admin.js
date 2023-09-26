@@ -50,7 +50,13 @@ function Admin(props) {
   useEffect(() => {
     const memberIdx = localStorage.getItem('memberIdx');
     const apiUrl = `/api/meditation/list/${memberIdx}`;
-    axios.get(apiUrl)
+    const accessToken = localStorage.getItem('accessToken');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 추가
+      },
+    };
+    axios.get(apiUrl, config)
       .then((response) => {
         // 응답 데이터를 상태 변수에 저장
         setMeditationData(response.data);
