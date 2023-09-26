@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 public class CalendarResponseDto {
+	private int year;
 	private int month;
 	private int day;
 	private Long memoIdx;
