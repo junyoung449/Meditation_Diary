@@ -2,6 +2,7 @@ package com.project.mt.calendar.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.project.mt.calendar.dto.request.CalendarRequestDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.project.mt.meditation.repository.MeditationRepository;
 import com.project.mt.member.repository.MemberRepository;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -38,6 +40,10 @@ public class CalendarService {
 		if (memoResponse == null || memoResponse.isEmpty())
 			memoResponse = new ArrayList<>();
 
+		// 메모와 명상글을 날짜순으로 정렬
+		meditationResponse.sort(Comparator.comparing(Meditation::getDate));
+		memoResponse.sort(Comparator.comparing(Memo::getDate));
+
 		return mapMeditationAndMemoToResponseDto(meditationResponse, memoResponse);
     }
 
@@ -45,13 +51,48 @@ public class CalendarService {
 	private List<CalendarResponseDto> mapMeditationAndMemoToResponseDto(List<Meditation> meditationResponse, List<Memo> memoResponse) {
 		List<CalendarResponseDto> responseDto = new ArrayList<>();
 
-		for (int i = 0 ; i < memoResponse.size() ; i++) {
-			Date date = new Date(meditationResponse.get(i).getDate().getTime());
+		int meditationIndex = 0;
+		int memoIndex = 0;
 
-			int month = date.getMonth() + 1;
-			int day = date.getDate();
-			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(month, day, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
-			responseDto.add(calendarResponseDto);
+		while (meditationIndex < meditationResponse.size() || memoIndex < memoResponse.size()) {
+			Date meditationDate = meditationIndex < meditationResponse.size() ?
+				new Date(meditationResponse.get(meditationIndex).getDate().getTime()) : null;
+			Date memoDate = memoIndex < memoResponse.size() ?
+				new Date(memoResponse.get(memoIndex).getDate().getTime()) : null;
+
+			if (meditationDate == null) {
+				// 날짜가 없는 경우 메모만 있음
+				int month = memoDate.getMonth() + 1;
+				int day = memoDate.getDate();
+				CalendarResponseDto calendarResponseDto = new CalendarResponseDto(month, day, memoResponse.get(memoIndex).getMemoIdx(), null);
+				responseDto.add(calendarResponseDto);
+				memoIndex++;
+			} else if (memoDate == null) {
+				// 날짜가 없는 경우 명상글만 있음
+				int month = meditationDate.getMonth() + 1;
+				int day = meditationDate.getDate();
+				CalendarResponseDto calendarResponseDto = new CalendarResponseDto(month, day, null, meditationResponse.get(meditationIndex).getMeditationIdx());
+				responseDto.add(calendarResponseDto);
+				meditationIndex++;
+			} else {
+				// 날짜가 모두 있는 경우
+				int meditationMonth = meditationDate.getMonth() + 1;
+				int meditationDay = meditationDate.getDate();
+				int memoMonth = memoDate.getMonth() + 1;
+				int memoDay = memoDate.getDate();
+
+				if (meditationDate.before(memoDate)) {
+					// 명상글이 먼저 작성된 경우
+					CalendarResponseDto calendarResponseDto = new CalendarResponseDto(meditationMonth, meditationDay, null, meditationResponse.get(meditationIndex).getMeditationIdx());
+					responseDto.add(calendarResponseDto);
+					meditationIndex++;
+				} else {
+					// 메모가 먼저 작성된 경우
+					CalendarResponseDto calendarResponseDto = new CalendarResponseDto(memoMonth, memoDay, memoResponse.get(memoIndex).getMemoIdx(), null);
+					responseDto.add(calendarResponseDto);
+					memoIndex++;
+				}
+			}
 		}
 
 		return responseDto;
