@@ -11,7 +11,7 @@ function KakaoLogined() {
   // 예: API 호출, 데이터 처리, 상태 업데이트 등
 
   axios.get('https://j9b205.p.ssafy.io/api/auth/kakao', {
-    params: { code: code },
+    params: { code: code }
   })
     .then((response) => {
       // 요청이 성공했을 때의 처리
