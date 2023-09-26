@@ -4,6 +4,7 @@ import axios from 'axios';
 function ImageUpload() {
   const [images, setImages] = useState([]);
   const memberIdx = localStorage.getItem('memberIdx')
+  const accessToken = localStorage.getItem('accessToken')
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
@@ -21,6 +22,7 @@ function ImageUpload() {
       .post('/api/meditation', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${accessToken}`,
         },
       })
       .then((response) => {
