@@ -55,6 +55,7 @@ function AdminNavbar(props) {
         Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 추가
       },
     });
+    localStorage.clear();
   }
   
   const handleKakaoLogin = () => {

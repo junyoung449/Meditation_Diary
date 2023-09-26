@@ -1,48 +1,62 @@
-import React from "react";
-// import React, { useState } from 'react';
-// import axios from 'axios';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function Create() {
-    const audio = '/audio/sample.m4a'; // public 폴더를 기준으로 상대 경로 지정
-//   const [image, setImage] = useState(null);
-//   const [audio, setAudio] = useState(null);
+  const [image, setImage] = useState(null);
+  const [audio, setAudio] = useState(null);
 
-//   const handleImageChange = (event) => {
-//     const selectedImage = event.target.files[0];
-//     setImage(selectedImage);
-//   };
+  const handleImageChange = (event) => {
+    const selectedImage = event.target.files[0];
+    setImage(selectedImage);
+  };
 
-//   const handleImageUpload = () => {
-//     if (image) {
-//       const formData = new FormData();
-//       formData.append('image', image);
+  const handleImageUpload = () => {
+    if (image) {
+      const formData = new FormData();
+      formData.append('image', image);
 
-//       axios
-//         .post('/api/upload-image', formData)
-//         .then((response) => {
-//           // 이미지 업로드 성공 후 응답 처리
-//           console.log('Image uploaded successfully:', response.data);
-//         })
-//         .catch((error) => {
-//           console.error('Error uploading image:', error);
-//         });
-//     }
-//   };
+      // 액세스 토큰 가져오기
+      const accessToken = localStorage.getItem('accessToken'); // 예: 로컬 스토리지에서 가져옴
 
-//   const handleAudioRequest = () => {
-//     axios
-//       .get('/api/request-audio')
-//       .then((response) => {
-//         // 음성 파일 요청 후 응답 처리
-//         console.log('Received audio file:', response.data);
+      // axios 요청 헤더에 액세스 토큰 추가
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
 
-//         // 받은 음성 파일을 상태로 설정
-//         setAudio(response.data);
-//       })
-//       .catch((error) => {
-//         console.error('Error requesting audio:', error);
-//       });
-//   };
+      axios
+        .post('/api/meditation', formData, config)
+        .then((response) => {
+          console.log('Image uploaded successfully:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error uploading image:', error);
+        });
+    }
+  };
+
+  const handleAudioRequest = () => {
+    // 액세스 토큰 가져오기
+    const accessToken = localStorage.getItem('accessToken'); // 예: 로컬 스토리지에서 가져옴
+
+    // axios 요청 헤더에 액세스 토큰 추가
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .get('/api/request-audio', config)
+      .then((response) => {
+        console.log('Received audio file:', response.data);
+        setAudio(response.data);
+      })
+      .catch((error) => {
+        console.error('Error requesting audio:', error);
+      });
+  };
 
   return (
     <div>
@@ -50,19 +64,18 @@ function Create() {
 
       <div>
         <h2>Upload an Image</h2>
-        {/* <input type="file" accept="image/*" onChange={handleImageChange} />
-        <button onClick={handleImageUpload}>Upload</button> */}
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <button onClick={handleImageUpload}>Upload</button>
       </div>
 
       <div>
         <h2>Request Audio</h2>
-        {/* <button onClick={handleAudioRequest}>Request Audio</button> */}
+        <button onClick={handleAudioRequest}>Request Audio</button>
       </div>
 
       {audio && (
         <div>
           <h2>Received Audio</h2>
-          {/* 음성 파일을 플레이어나 오디오 태그로 표시 */}
           <audio controls>
             <source src={audio} type="audio/mp4" />
           </audio>
