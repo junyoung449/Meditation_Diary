@@ -38,7 +38,6 @@ import requests
 import secrets
 
 from pydub import AudioSegment
-AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
 
 app = FastAPI()
 
