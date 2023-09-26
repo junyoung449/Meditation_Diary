@@ -48,25 +48,27 @@ function Admin(props) {
   }
   const [meditationData, setMeditationData] = useState([]);
   useEffect(() => {
-    const memberIdx = localStorage.getItem('memberIdx');
-    const apiUrl = `/api/meditation/list/${memberIdx}`;
-    const accessToken = localStorage.getItem('accessToken');
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 추가
-      },
+    const fetchData = async () => {
+        const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
+        const apiUrl = `/api/meditation/list/${memberIdx}`;
+        const accessToken = localStorage.getItem('accessToken');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+        try {
+            const response = await axios.get(apiUrl, config);
+            setMeditationData(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.error('GET 요청 중 오류 발생:', error);
+        }
     };
-    axios.get(apiUrl, config)
-      .then((response) => {
-        // 응답 데이터를 상태 변수에 저장
-        setMeditationData(response.data);
-        console.log(meditationData)
-      })
-      .catch((error) => {
-        // 오류 처리
-        console.error('GET 요청 중 오류 발생:', error);
-      });
-  }, [meditationData]);
+
+    fetchData(); // 함수를 호출하여 데이터를 가져오도록 함
+  }, []); // 의존성 배열에 빈 배열
+
   console.log('------------------')
   console.log(meditationData)
   console.log('------------------')
