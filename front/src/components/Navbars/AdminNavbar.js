@@ -45,7 +45,7 @@ function AdminNavbar(props) {
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
   const handleLogout = () => {
-    axios.get('/api/member/logout/{}')
+    axios.get(`/api/member/logout/${localStorage.getItem('memberIdx')}}`)
   }
   const handleKakaoLogin = () => {
     // 환경 변수에서 값을 가져오기
