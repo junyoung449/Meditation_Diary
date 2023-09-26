@@ -13,5 +13,5 @@ public class MeditationListResponseDto {
     private Long memberIdx;
     private Timestamp date;
     // 썸네일 사진
-    private String meditationImage;
+    private String imageUrl;
 }
