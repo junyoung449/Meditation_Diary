@@ -39,8 +39,6 @@ import secrets
 
 from pydub import AudioSegment
 
-AudioSegment.ffmpeg = "ffmpeg-2023-09-07-git-9c9f48e7f2-full_build/bin/ffmpeg.exe"
-
 app = FastAPI()
 
 dotenv.load_dotenv()
@@ -81,7 +79,7 @@ def ipynb(imageRequest: ImageURLRequest):
     for image in imageRequest.images:
 
         IMAGE_URL = image
-        
+
         message = ""
 
         channel = ClarifaiChannel.get_grpc_channel()
@@ -126,7 +124,8 @@ def ipynb(imageRequest: ImageURLRequest):
         response = openai.ChatCompletion.create(
             model=MODEL,
             messages=[
-                {"role": "system", "content": "존댓말로 작성해. 셰익스피어처럼 표현해줘. 나래이션의 스크립트가 필요해. 그 문단은 이 20개의 단어로 구성되어야 해. 꼭 이 단어를 전부 사용할 필요는 없어. 감성적인 표현이 주가 되어야 해. 한국어로 작성하도록 해."},
+                {"role": "system",
+                 "content": "존댓말로 작성해. 셰익스피어처럼 표현해줘. 나래이션의 스크립트가 필요해. 그 문단은 이 20개의 단어로 구성되어야 해. 꼭 이 단어를 전부 사용할 필요는 없어. 감성적인 표현이 주가 되어야 해. 한국어로 작성하도록 해."},
                 {"role": "user", "content": USER_INPUT_MSG},
                 {"role": "user", "content": "300글자 이상 500글자 이하가 되도록 문단을 작성해."},
                 {"role": "assistant", "content": "네. 글자수는 300글자 이상 500글자 이하가 되도록 문단을 작성하도록 하겠습니다."},
@@ -140,11 +139,10 @@ def ipynb(imageRequest: ImageURLRequest):
 
         # response['choices'][0]['message']['content']
 
-
         result += f"{response['choices'][0]['message']['content']} "
 
     print(result)
-    
+
     CHUNK_SIZE = 1024
     elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
 
@@ -179,7 +177,6 @@ def ipynb(imageRequest: ImageURLRequest):
     return {"audios": saveAudioAtS3(fileName)}
 
 
-# @app.post("/ai/audio")
 def saveAudioAtS3(audio):
     audioUrl = []
 
@@ -204,14 +201,12 @@ def saveAudioAtS3(audio):
         print(f"Another error => {e}")
 
 
-@app.get("/ai/back")
 def makeBackGroundMusic(name):
     # 배경 음악 파일 로드
-    background_music = AudioSegment.from_mp3("./audio/back.mp3")
+    background_music = AudioSegment.from_mp3("./audio/back.mp3") - 10
 
     # 원본 mp3 파일 로드
     original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3")
-    # original_audio = AudioSegment.from_mp3("./audio/speak.mp3")
 
     # 로컬에 있는 mp3 파일 삭제
     os.remove("./audio/" + name + ".mp3")
