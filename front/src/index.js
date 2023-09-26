@@ -32,6 +32,7 @@ import BackgroundColorWrapper from "./components/BackgroundColorWrapper/Backgrou
 import KakaoLogined from "./components/Kakao/Kakao";
 import Create from "components/CRUD/Create";
 import BeforeLogin from "layouts/Admin/BeforeLogin";
+import MyApp from "layouts/Calender/MyApp";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -45,6 +46,7 @@ root.render(
           <Route path="/kakao" element={<KakaoLogined />} />
           <Route path="/crud" element={<Create />} />
           <Route path="/beforelogin" element={<BeforeLogin />} />
+          <Route path="/calender" element={<MyApp />}/>
           <Route
             path="*"
             element={<Navigate to="/admin/dashboard" replace />}
