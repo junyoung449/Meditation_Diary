@@ -66,7 +66,7 @@ function Admin(props) {
         // 오류 처리
         console.error('GET 요청 중 오류 발생:', error);
       });
-  });
+  }, [meditationData]);
   console.log('------------------')
   console.log(meditationData)
   console.log('------------------')

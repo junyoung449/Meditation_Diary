@@ -45,7 +45,7 @@ function AdminNavbar(props) {
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
   const handleLogout = () => {
-    axios.get(`/api/member/logout/${localStorage.getItem('memberIdx')}}`,{
+    axios.get(`/api/member/logout/${parseInt(localStorage.getItem('memberIdx'),10)}}`,{
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // 액세스 토큰을 헤더에 추가
       }}
