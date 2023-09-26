@@ -48,9 +48,10 @@ public class CalendarService {
 		for (int i = 0 ; i < memoResponse.size() ; i++) {
 			Date date = new Date(meditationResponse.get(i).getDate().getTime());
 
+			int year = date.getYear();
 			int month = date.getMonth() + 1;
 			int day = date.getDate();
-			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(month, day, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
+			CalendarResponseDto calendarResponseDto = new CalendarResponseDto(year, month, day, memoResponse.get(i).getMemoIdx(), meditationResponse.get(i).getMeditationIdx());
 			responseDto.add(calendarResponseDto);
 		}
 
