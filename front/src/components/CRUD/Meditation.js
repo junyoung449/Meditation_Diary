@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function Meditation({ match }) {
   const [audioUrl, setAudioUrl] = useState("");
-  const meditationIdx = match.params.index; // 경로에서 meditationIdx 추출
+  const { index } = useParams();
+  const meditationIdx = index; // 경로에서 meditationIdx 추출
 
   useEffect(() => {
     // 해당 meditationIdx에 대한 음성 파일 URL을 가져옴

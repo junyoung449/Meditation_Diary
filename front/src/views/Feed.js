@@ -35,9 +35,9 @@ function MeditationGrid() {
     for (let i = 0; i < meditationList.length; i += itemsPerRow) {
       const row = meditationList.slice(i, i + itemsPerRow);
       const cols = row.map((item) => (
-        <Col xs='12' sm='12'>
+        <Col xs='4'>
           <MeditationThumbnail
-            index={item.index}
+            index={item.meditationIdx}
             thumbnailImageUrl={item.imageUrl}
           />
         </Col>
