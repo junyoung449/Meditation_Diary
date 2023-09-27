@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MeditationThumbnail from "./Thumbnail";
 
-function MeditationGrid({ memberIdx }) {
+function MeditationGrid() {
   const [meditationList, setMeditationList] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
+  const memberIdx = localStorage.getItem('memberIdx');
 
   useEffect(() => {
     // 게시글 리스트를 가져오는 요청
