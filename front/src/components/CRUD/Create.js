@@ -8,15 +8,19 @@ function ImageUpload() {
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
+    console.log('selectedImages :', selectedImages);
     setImages(selectedImages);
   };
 
   const handleImageUpload = () => {
+    console.log('images :', images)
+    console.log('memberIdx :', memberIdx)
+    console.log('accessToken :', accessToken)
     const formData = new FormData();
     images.forEach((image, index) => {
       formData.append(`images[${index}]`, image); // "images" 이름으로 이미지들을 전송
-    });
-    formData.append('memberIdx', memberIdx);
+    });    formData.append('memberIdx', memberIdx);
+
     console.log(formData);
     axios
       .post('/api/meditation', formData, {
