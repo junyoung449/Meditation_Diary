@@ -206,13 +206,16 @@ def makeBackGroundMusic(name):
     background_music = AudioSegment.from_mp3("./audio/back.mp3") - 4
 
     # 원본 mp3 파일 로드
-    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3")
+    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3") - 3
 
+    # 음성 속도 조절
+    abjusted_audio = original_audio.speedup(playback_speed=0.8)
+    
     # 로컬에 있는 mp3 파일 삭제
     os.remove("./audio/" + name + ".mp3")
 
     # 배경 음악과 원본 오디오 합치기
-    output_audio = background_music.overlay(original_audio)
+    output_audio = background_music.overlay(abjusted_audio)
 
     # 결과를 새 파일로 저장
     output_audio.export("./audio/" + name + ".mp3", format="mp3")
