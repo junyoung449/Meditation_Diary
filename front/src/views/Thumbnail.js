@@ -1,10 +1,10 @@
 // import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function MeditationThumbnail({ index, thumbnailImageUrl }) {
 //   const [meditationData, setMeditationData] = useState(null);
-  const history = useHistory();
+  const history = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const handleClick = () => {
     // Axios 요청을 이용하여 명상 글 데이터 가져오기
