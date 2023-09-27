@@ -17,7 +17,7 @@ function MeditationThumbnail({ index, thumbnailImageUrl }) {
         console.log('meditationData :', response.data);
         // setMeditationData(response.data);
         // 클릭 시 해당 명상 글 상세 페이지로 이동
-        navigate(`/meditation/${index}`, { meditationData: response.data });
+        navigate(`/meditation/${index}`, { state: { meditationData: response.data } });
       })
       .catch((error) => {
         console.error("Error fetching meditation data:", error);
