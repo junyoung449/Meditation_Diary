@@ -171,7 +171,7 @@ def ipynb(imageRequest: ImageURLRequest):
             if chunk:
                 f.write(chunk)
 
-    makeBackGroundMusic(name)
+    # makeBackGroundMusic(name)
     fileName.append(name + ".mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
