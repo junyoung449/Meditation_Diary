@@ -24,6 +24,7 @@ function ImageUpload() {
     });
     formData.append('memberIdx', memberIdx);
     console.log(formData);
+    console.log([...formData.entries()]);
     axios
       .post('/api/meditation', formData, {
         headers: {
