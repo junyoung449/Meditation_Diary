@@ -37,7 +37,7 @@ function MeditationGrid() {
       const cols = row.map((item) => (
         <Col xs='4'>
           <MeditationThumbnail
-            index={item.index}
+            index={item.meditationIdx}
             thumbnailImageUrl={item.imageUrl}
           />
         </Col>
