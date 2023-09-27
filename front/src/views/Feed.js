@@ -4,10 +4,10 @@ import MeditationThumbnail from "./Thumbnail";
 
 function MeditationGrid() {
   const [meditationList, setMeditationList] = useState([]);
-  const accessToken = localStorage.getItem('accessToken');
-  const memberIdx = localStorage.getItem('memberIdx');
 
   useEffect(() => {
+    const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
+    const accessToken = localStorage.getItem('accessToken');
     // 게시글 리스트를 가져오는 요청
     axios.get(`/api/meditation/list/${memberIdx}`, {
       headers: {
@@ -20,7 +20,7 @@ function MeditationGrid() {
       .catch((error) => {
         console.error("Error fetching meditation list:", error);
       });
-  }, [memberIdx, accessToken]);
+  }, []);
 
   // 3열 그리드로 나타내기 위한 함수
   const createGrid = () => {
@@ -33,7 +33,7 @@ function MeditationGrid() {
         <div key={item.index} className="col-lg-4">
           <MeditationThumbnail
             index={item.index}
-            thumbnailImageUrl={item.thumbnailImageUrl}
+            thumbnailImageUrl={item.imageUrl}
           />
         </div>
       ));
