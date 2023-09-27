@@ -6,7 +6,7 @@ function Meditation({ match }) {
   const [audioUrl, setAudioUrl] = useState("");
   const { index } = useParams();
   const meditationIdx = index; // 경로에서 meditationIdx 추출
-
+  console.log(meditationIdx)
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
     // 해당 meditationIdx에 대한 음성 파일 URL을 가져옴
@@ -17,6 +17,7 @@ function Meditation({ match }) {
         }
       })
       .then((response) => {
+        console.log(response.data);
         setAudioUrl(response.data.audioUrl);
       })
       .catch((error) => {
