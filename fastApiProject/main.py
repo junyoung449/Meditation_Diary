@@ -134,7 +134,7 @@ def ipynb(imageRequest: ImageURLRequest):
                 # {"role": "assistant", "content": "Who's there?"},
             ],
             temperature=0.7,
-            max_tokens=700  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
+            max_tokens=1000  # 최대 토큰 수를 설정하여 답변의 길이를 제어합니다.
         )
 
         # response['choices'][0]['message']['content']
@@ -171,7 +171,7 @@ def ipynb(imageRequest: ImageURLRequest):
             if chunk:
                 f.write(chunk)
 
-    # makeBackGroundMusic(name)
+    makeBackGroundMusic(name)
     fileName.append(name + ".mp3")
 
     return {"audios": saveAudioAtS3(fileName)}
@@ -203,7 +203,7 @@ def saveAudioAtS3(audio):
 
 def makeBackGroundMusic(name):
     # 배경 음악 파일 로드
-    background_music = AudioSegment.from_mp3("./audio/back.mp3") - 10
+    background_music = AudioSegment.from_mp3("./audio/back.mp3") - 4
 
     # 원본 mp3 파일 로드
     original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3")
@@ -212,7 +212,7 @@ def makeBackGroundMusic(name):
     os.remove("./audio/" + name + ".mp3")
 
     # 배경 음악과 원본 오디오 합치기
-    output_audio = original_audio.overlay(background_music)
+    output_audio = background_music.overlay(original_audio)
 
     # 결과를 새 파일로 저장
     output_audio.export("./audio/" + name + ".mp3", format="mp3")
