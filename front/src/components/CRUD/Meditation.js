@@ -1,44 +1,53 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 
-function Meditation({ match }) {
-  const [audioUrl, setAudioUrl] = useState("");
-  const { index } = useParams();
-  const meditationIdx = index; // 경로에서 meditationIdx 추출
-  console.log(meditationIdx)
+function MeditationDetail({ meditationData }) {
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [audioPlayer, setAudioPlayer] = useState(null);
+
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-    // 해당 meditationIdx에 대한 음성 파일 URL을 가져옴
-    axios
-      .get(`/api/meditation/${meditationIdx}`, {
-        headers : {
-          'Authorization' : `Bearer ${accessToken}`
-        }
-      })
-      .then((response) => {
-        console.log(response.data);
-        setAudioUrl(response.data.audioUrl);
-      })
-      .catch((error) => {
-        console.error("Error fetching audio URL:", error);
-      });
-  }, [meditationIdx]);
+    // Audio 객체 생성
+    const audio = new Audio();
+    audio.src = meditationData.meditationMedia[currentAudioIndex].audioUrl;
+
+    // 음성 파일이 끝나면 다음 음성 파일 재생
+    audio.addEventListener("ended", () => {
+      if (currentAudioIndex < meditationData.meditationMedia.length - 1) {
+        setCurrentAudioIndex(currentAudioIndex + 1);
+        audio.src = meditationData.meditationMedia[currentAudioIndex + 1].audioUrl;
+        audio.play();
+      }
+    });
+
+    setAudioPlayer(audio);
+
+    // 컴포넌트가 언마운트될 때 리소스 해제
+    return () => {
+      audio.pause();
+      audio.removeEventListener("ended", () => {});
+    };
+  }, [currentAudioIndex, meditationData]);
+
+  const playAudio = () => {
+    if (audioPlayer) {
+      audioPlayer.play();
+    }
+  };
+
+  const pauseAudio = () => {
+    if (audioPlayer) {
+      audioPlayer.pause();
+    }
+  };
 
   return (
     <div>
-      {audioUrl && (
-        <div>
-          <h2>Audio</h2>
-          <audio controls>
-            <source src={audioUrl} type="audio/mp3" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      )}
-      {/* 다른 게시글 정보 표시 */}
+      <img src={meditationData.meditationMedia[currentAudioIndex].imageUrl} alt="Meditation" />
+      <div>
+        <button onClick={playAudio}>재생</button>
+        <button onClick={pauseAudio}>일시 정지</button>
+      </div>
     </div>
   );
 }
 
-export default Meditation;
+export default MeditationDetail;
