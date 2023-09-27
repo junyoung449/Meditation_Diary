@@ -28,7 +28,8 @@ public class MeditationController {
 	private final MeditationService meditationService;
 	private final AwsS3Uploader awsS3Uploader;
 
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	// @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping
 	public ResponseEntity<?> save(@RequestParam List<MultipartFile> images,
 								  @RequestParam Long memberIdx) throws IOException {
 		Map<String, Object> response = new HashMap<>();
