@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MeditationThumbnail from "./Thumbnail";
+// import classNames from "classnames";
+import {
+    Row,
+    Col,
+  } from "reactstrap";
 
 function MeditationGrid() {
   const [meditationList, setMeditationList] = useState([]);
@@ -30,17 +35,17 @@ function MeditationGrid() {
     for (let i = 0; i < meditationList.length; i += itemsPerRow) {
       const row = meditationList.slice(i, i + itemsPerRow);
       const cols = row.map((item) => (
-        <div key={item.index} className="col-lg-4">
+        <Col xs='12' sm='12'>
           <MeditationThumbnail
             index={item.index}
             thumbnailImageUrl={item.imageUrl}
           />
-        </div>
+        </Col>
       ));
       grid.push(
-        <div key={i} className="row">
+        <Row>
           {cols}
-        </div>
+        </Row>
       );
     }
 
@@ -48,7 +53,7 @@ function MeditationGrid() {
   };
 
   return (
-    <div className="meditation-grid">
+    <div className="content">
       {createGrid()}
     </div>
   );
