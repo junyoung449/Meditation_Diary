@@ -17,7 +17,7 @@ function ImageUpload() {
       formData.append(`images[${index}]`, image); // "images" 이름으로 이미지들을 전송
     });
     formData.append('memberIdx', memberIdx);
-
+    console.log(formData);
     axios
       .post('/api/meditation', formData, {
         headers: {
