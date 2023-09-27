@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 function MeditationDetail({ meditationData }) {
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [audioPlayer, setAudioPlayer] = useState(null);
+  console.log('meditationDetail에서 Data :', meditationData);
 
   useEffect(() => {
     // Audio 객체 생성
