@@ -18,9 +18,11 @@ function ImageUpload() {
     console.log('accessToken :', accessToken)
     const formData = new FormData();
     images.forEach((image, index) => {
-      formData.append(`images[${index}]`, image); // "images" 이름으로 이미지들을 전송
-    });    formData.append('memberIdx', memberIdx);
-
+      console.log(index,'번째 이미지 :', image)
+      formData.append('images', image); // "images" 이름으로 이미지들을 전송
+      console.log(formData)
+    });
+    formData.append('memberIdx', memberIdx);
     console.log(formData);
     axios
       .post('/api/meditation', formData, {
