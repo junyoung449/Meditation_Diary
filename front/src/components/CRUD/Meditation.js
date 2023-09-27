@@ -8,9 +8,14 @@ function Meditation({ match }) {
   const meditationIdx = index; // 경로에서 meditationIdx 추출
 
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken')
     // 해당 meditationIdx에 대한 음성 파일 URL을 가져옴
     axios
-      .get(`/api/meditation/${meditationIdx}`)
+      .get(`/api/meditation/${meditationIdx}`, {
+        headers : {
+          'Authorization' : `Bearer ${accessToken}`
+        }
+      })
       .then((response) => {
         setAudioUrl(response.data.audioUrl);
       })
