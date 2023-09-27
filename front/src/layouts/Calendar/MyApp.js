@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Calendar from 'react-calendar';
-import '/Users/leehyungseok/Desktop/specialization/Front/S09P22B205/front/src/assets/css/Calendar.css';
+import '../../assets/css/Calendar.css';
 import moment from 'moment';
 import axios from 'axios'; // axios 라이브러리를 추가로 가져옵니다.
 
