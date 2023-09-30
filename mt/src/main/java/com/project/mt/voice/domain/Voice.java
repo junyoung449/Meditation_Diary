@@ -21,8 +21,8 @@ public class Voice {
     @Column(name = "voice_name")
     private String voiceName;
 
-    @Column(name = "voice_url")
-    private String voiceUrl;
+    @Column(name = "model_id")
+    private String modelId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_idx")

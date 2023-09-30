@@ -5,6 +5,7 @@ import java.util.*;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,12 @@ public class MeditationController {
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> save(@RequestParam List<MultipartFile> images,
-								  @RequestParam Long memberIdx) throws IOException {
+								  @RequestParam Long memberIdx, @RequestParam(required = false) Long voiceIdx) throws IOException {
 		Map<String, Object> response = new HashMap<>();
 
 		String[] imageUrl = awsS3Uploader.upload(images, "image");
 
-		Long meditationIdx = meditationService.getMedia(memberIdx, imageUrl);
+		Long meditationIdx = meditationService.getMedia(memberIdx, voiceIdx == null ? 0 : voiceIdx, imageUrl);
 
 		response.put("meditationIdx", meditationIdx);
 

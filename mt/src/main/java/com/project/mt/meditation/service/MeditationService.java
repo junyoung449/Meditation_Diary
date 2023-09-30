@@ -15,12 +15,15 @@ import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.repository.MeditationMediaRepository;
 import com.project.mt.member.domain.Member;
 import com.project.mt.member.repository.MemberRepository;
+import com.project.mt.voice.domain.Voice;
+import com.project.mt.voice.repository.VoiceRepository;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.mt.meditation.repository.MeditationRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.mt.fileupload.util.UseJson;
@@ -33,14 +36,23 @@ public class MeditationService {
     private final MeditationRepository meditationRepository;
     private final MeditationMediaRepository meditationMediaRepository;
     private final MemberRepository memberRepository;
+    private final VoiceRepository voiceRepository;
 
     @Autowired
     private UseJson useJson;
 
-    public Long getMedia(Long memberIdx, String[] imageUrl) {
+    @Value("${default.voice}")
+    public String defaultVoice;
+
+    public Long getMedia(Long memberIdx, Long voiceIdx, String[] imageUrl) {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        JSONObject requestBody = useJson.createRequestBody(memberIdx, imageUrl);
+        Voice voice = null;
+
+        if (voiceIdx != 0)
+            voice = voiceRepository.findVoiceByVoiceIdx(voiceIdx).orElseThrow(() -> new RestApiException(ErrorCode.VOICE_NOT_FOUND));
+
+        JSONObject requestBody = useJson.createRequestBody(memberIdx, voice.getModelId() == null ? defaultVoice : voice.getModelId(), imageUrl);
         Map<String, List<String>> response = useJson.callConversionApi(requestBody);
 
         String[] audioUrl = new String[imageUrl.length];

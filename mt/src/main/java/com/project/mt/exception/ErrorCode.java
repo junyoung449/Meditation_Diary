@@ -30,6 +30,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 회원입니다."),
     MEDITATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 명상 글입니다."),
     MEMO_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 메모 글입니다."),
+    VOICE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 목소리입니다."),
 
     MEMO_NOT_DELETE(HttpStatus.NOT_FOUND, "메모 글 삭제에 실패했습니다."),
     MEMO_NOT_MODIFY(HttpStatus.NOT_FOUND, "메모 글 수정에 실패했습니다."),

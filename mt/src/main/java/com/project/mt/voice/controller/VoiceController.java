@@ -1,8 +1,7 @@
 package com.project.mt.voice.controller;
 
 import com.project.mt.fileupload.config.AwsS3Uploader;
-import com.project.mt.voice.dto.request.VoiceRequest;
-import com.project.mt.voice.repository.VoiceRepository;
+import com.project.mt.voice.dto.request.VoiceRequestDto;
 import com.project.mt.voice.service.VoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +25,26 @@ public class VoiceController {
     private final VoiceService voiceService;
 
     @PostMapping
-    public ResponseEntity<?> saveVoice(@RequestParam MultipartFile voice, @RequestParam VoiceRequest voiceRequest)
+    public ResponseEntity<?> saveVoice(@RequestParam MultipartFile voice, @RequestParam Long memberIdx, @RequestParam String voiceName)
             throws IOException {
         Map<String, Object> response = new HashMap<>();
 
         List<MultipartFile> list = new ArrayList<>();
 
-        list.add(voice);
+//        list.add(voice);
+//
+//        String[] voiceUrl = awsS3Uploader.upload(list, "voice");
 
-        String[] voiceUrl = awsS3Uploader.upload(list, "voice");
+        VoiceRequestDto voiceRequestDto = new VoiceRequestDto(memberIdx, voiceName);
 
-        response.put("voiceIdx", voiceService.saveVoice(voiceRequest, voiceUrl[0]));
+        response.put("voiceIdx", voiceService.saveVoice(voiceRequestDto, voice));
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{memberIdx}")
+    public ResponseEntity<?> findVoiceList(@PathVariable("memberIdx") Long memberIdx) {
+        return ResponseEntity.ok(voiceService.findVoiceList(memberIdx));
+    }
+
 }
