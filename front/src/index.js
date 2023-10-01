@@ -32,6 +32,7 @@ import BackgroundColorWrapper from "./components/BackgroundColorWrapper/Backgrou
 import KakaoLogined from "./components/Kakao/Kakao";
 import Create from "components/CRUD/Create";
 import BeforeLogin from "layouts/Admin/BeforeLogin";
+import Meditation from "components/CRUD/Meditation";
 
 import Frame from "layouts/CalendarAndMemoAndFeed/Frame"
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -47,9 +48,10 @@ root.render(
           <Route path="/crud" element={<Create />} />
           <Route path="/beforelogin" element={<BeforeLogin />} />
           <Route path="/frame" element={<Frame/>}/>
+          <Route path="/meditation/:index" element={<Meditation />} />
           <Route
             path="*"
-            element={<Navigate to="/admin/dashboard" replace />}
+            element={<Navigate to="/admin/feed" replace />}
           />
         </Routes>
       </BrowserRouter>
