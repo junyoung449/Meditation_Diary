@@ -29,10 +29,6 @@ from pydantic import BaseModel
 
 from typing import List
 
-import boto3
-
-import dotenv
-
 import requests
 
 import secrets
@@ -59,6 +55,7 @@ class Audio(BaseModel):
 
 class ImageURLRequest(BaseModel):
     images: List[str]
+    voice_id: str
 
 
 @app.post("/ai/text")
@@ -144,7 +141,7 @@ def ipynb(imageRequest: ImageURLRequest):
     print(result)
 
     CHUNK_SIZE = 1024
-    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + imageRequest.voice_id
 
     headers = {
         "Accept": "audio/mpeg",
