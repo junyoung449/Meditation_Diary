@@ -1,11 +1,12 @@
 .frame {
     display: flex;
     flex-direction: column;
+    background-color: white;
     height: 100vh;
   }
   
   .header, .footer {
-    background-color: #333; /* 예시 색상 */
+    /* background-color: #333; */
     color: white; /* 예시 색상 */
     padding: 10px; /* 예시 여백 */
   }

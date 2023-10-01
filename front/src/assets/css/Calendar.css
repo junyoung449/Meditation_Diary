@@ -1,8 +1,8 @@
 .react-calendar {
-    width: 350px;
+    /* width: 350px; */
     max-width: 100%;
     background: white;
-    border: 1px solid #a0a096;
+    /* border: 1px solid #a0a096; */
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
   }
@@ -44,10 +44,12 @@
     display: flex;
     height: 44px;
     margin-bottom: 1em;
+    font-weight: bold; /* Make the text bolder */
+    font-size: 1.5em; /* Increase the font size */
   }
   
   .react-calendar__navigation button {
-    min-width: 44px;
+    /* min-width: 44px; */
     background: none;
   }
   
@@ -166,18 +168,19 @@
   /* 명상 표시 스타일 */
   .meditation-highlight {
     position: relative;
+    z-index: 1; /* Ensure the date number is above the circle */
   }
   
   .meditation-highlight::before {
     content: "";
     display: block;
-    width: 20px;
-    height: 20px;
-    background-color: gray; /* 회색 원 색상 */
+    width: 25px;
+    height: 25px;
+    background-color: #D3D3D3; /* 회색 원 색상 */
     border-radius: 50%; /* 원 모양으로 만들기 */
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-  }
-  
+    z-index: -1; /* Place the circle behind the date number */
+}

@@ -4,7 +4,7 @@ import '../../assets/css/Calendar.css';
 import moment from 'moment';
 import axios from 'axios'; // axios 라이브러리를 추가로 가져옵니다.
 
-function MyApp() {
+function MeditationCalendar() {
     const [value, onChange] = useState(new Date());
     const [calendarList, setCalendarList] = useState([]);
     const [memoMarks, setMemoMarks] = useState([]);
@@ -50,7 +50,7 @@ function MyApp() {
             <Calendar
                 onChange={onChange}
                 value={value}
-                locale="en-EN"
+                locale="en-US" firstDayOfWeek={0}
                 tileClassName={({ date, view }) => {
                     const dateStr = moment(date).format("DD-MM-YYYY");
                     if (memoMarks.includes(dateStr)) {
@@ -65,4 +65,4 @@ function MyApp() {
     );
 }
 
-export default MyApp;
+export default MeditationCalendar;
