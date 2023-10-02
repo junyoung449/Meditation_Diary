@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 
-function MeditationDetail(props) {
-  const { meditationData } = props.location.state;
+function MeditationDetail() {
+  const location = useLocation();
+  const meditationData = location.state.meditationData;
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [audioPlayer, setAudioPlayer] = useState(null);
   console.log('meditationDetail에서 Data :', meditationData);
