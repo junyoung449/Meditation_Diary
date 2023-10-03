@@ -8,7 +8,7 @@ function MeditationThumbnail({ index, thumbnailImageUrl }) {
   const accessToken = localStorage.getItem('accessToken');
   const handleClick = () => {
     // Axios 요청을 이용하여 명상 글 데이터 가져오기
-    axios.get(`/api/meditation/${index}`, {
+    axios.get(`https://j9b205.p.ssafy.io/api/meditation/${index}`, {
         headers : {
             'Authorization' : `Bearer ${accessToken}`,
         }
