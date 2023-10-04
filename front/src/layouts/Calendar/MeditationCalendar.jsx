@@ -43,8 +43,9 @@ function MeditationCalendar() {
             .filter((item) => item.meditationIdx !== null)
             .map((item) => {
                 const month = String(item.month).padStart(2, '0');
+                const day = String(item.day).padStart(2, '0');
                 return {
-                    date: `${item.day}-${month}-${item.year}`,
+                    date: `${day}-${month}-${item.year}`,
                     meditationIdx: item.meditationIdx
                 };
             });
