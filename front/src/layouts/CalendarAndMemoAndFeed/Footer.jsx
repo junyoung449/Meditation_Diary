@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from 'contexts/ThemeContext';
+import { ThemeContext, themes } from 'contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/css/Footer.css';
 
@@ -8,8 +8,10 @@ function Footer({ setSelectedTab }) {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   const toggleTheme = () => {
-    // 테마 변경 함수 호출
-    changeTheme(); // 이 함수를 호출하면 테마가 변경됩니다.
+    // 현재 테마가 "light"이면 "dark"로, 그 반대면 "light"로 변경
+    const newTheme = theme === themes.light ? themes.dark : themes.light;
+    console.log(newTheme,'으로 배경색 변경')
+    changeTheme(newTheme);
   };
 
   const handleCreateClick = () => {
