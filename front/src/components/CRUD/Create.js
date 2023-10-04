@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Footer from 'layouts/CalendarAndMemoAndFeed/Footer';
+// import Footer from 'layouts/CalendarAndMemoAndFeed/Footer';
 
 function ImageUpload() {
   const [images, setImages] = useState([]);
-  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
+  // const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
   const memberIdx = localStorage.getItem('memberIdx');
   const accessToken = localStorage.getItem('accessToken');
 
@@ -46,7 +46,7 @@ function ImageUpload() {
         <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/footer/footer-center.png" alt="Upload Icon" width="100" height="100" />
       </label>
       <input type="file" id="imageInput" accept="image/*" multiple onChange={handleImageChange} style={{ display: 'none' }} />
-      <Footer setSelectedTab={setSelectedTab} />
+      {/* <Footer setSelectedTab={setSelectedTab} /> */}
     </div>
   );
 }

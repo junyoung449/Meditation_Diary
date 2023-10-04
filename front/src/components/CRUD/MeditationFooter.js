@@ -3,7 +3,7 @@ import { ThemeContext, themes } from 'contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/css/Footer.css';
 
-function Footer({ setSelectedTab }) {
+function MeditationFooter({ setSelectedTab }) {
   const navigate = useNavigate();
   const { theme, changeTheme } = useContext(ThemeContext);
 
@@ -38,4 +38,4 @@ function Footer({ setSelectedTab }) {
   );
 }
 
-export default Footer;
+export default MeditationFooter;

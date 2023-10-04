@@ -7,7 +7,7 @@ import { BackgroundColorContext } from "../../contexts/BackgroundColorContext";
 import FixedPlugin from "../../components/FixedPlugin/FixedPlugin";
 
 function Frame() {
-  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
+  const [selectedTab, setSelectedTab] = useState('Feed'); // 기본적으로 Feed 탭 선택
   const { color: bgColor, changeColor } = useContext(BackgroundColorContext);
   const [isWhiteContent, setIsWhiteContent] = useState(false);
 
