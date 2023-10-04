@@ -37,7 +37,7 @@ function Frame() {
       <Header selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       <Center selectedTab={selectedTab} />
       <Footer setSelectedTab={setSelectedTab} />
-      <FixedPlugin bgColor={bgColor} handleBgClick={changeColor} />
+      {/* <FixedPlugin bgColor={bgColor} handleBgClick={changeColor} /> */}
     </div>
   );
 }
