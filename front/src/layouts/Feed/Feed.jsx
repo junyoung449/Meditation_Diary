@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MeditationThumbnail from "../../views/Thumbnail";
+import "../../assets/css/Feed.css"
 
 import {
     Row,
     Col,
   } from "reactstrap";
+
 
 function Feed() {
     const [meditationList, setMeditationList] = useState([]);
