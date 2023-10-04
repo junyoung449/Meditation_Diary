@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import { Button } from "reactstrap";
-import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
+// import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
 
 function BeforeLogin() {
   const { color: bgColor, changeColor } = useContext(BackgroundColorContext);
   const [isWhiteContent, setIsWhiteContent] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
+  // const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
 
   useEffect(() => {
     // body 요소의 클래스 변화를 감지하는 Mutation Observer 생성
@@ -62,7 +62,7 @@ function BeforeLogin() {
         Login with Kakao
       </Button>
       {/* <FixedPlugin bgColor={bgColor} handleBgClick={changeColor} /> */}
-      <Footer setSelectedTab={setSelectedTab} />
+      {/* <Footer setSelectedTab={setSelectedTab} /> */}
     </div>
   );
 }

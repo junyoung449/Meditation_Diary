@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
+import MeditationFooter from "./MeditationFooter";
 
 function MeditationDetail() {
   const location = useLocation();
   const meditationData = location.state.meditationData;
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [audioPlayer, setAudioPlayer] = useState(null);
-  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
-  console.log('meditationDetail에서 Data :', meditationData);
+  const [isPlaying, setIsPlaying] = useState(false); // 재생 상태를 나타내는 상태값
+  const [selectedTab, setSelectedTab] = useState("Feed"); // 기본적으로 Feed 탭 선택
+  console.log("meditationDetail에서 Data :", meditationData);
 
   useEffect(() => {
     // Audio 객체 생성
@@ -19,7 +20,8 @@ function MeditationDetail() {
     audio.addEventListener("ended", () => {
       if (currentAudioIndex < meditationData.meditationMedia.length - 1) {
         setCurrentAudioIndex(currentAudioIndex + 1);
-        audio.src = meditationData.meditationMedia[currentAudioIndex + 1].audioUrl;
+        audio.src =
+          meditationData.meditationMedia[currentAudioIndex + 1].audioUrl;
         audio.play();
       }
     });
@@ -36,23 +38,32 @@ function MeditationDetail() {
   const playAudio = () => {
     if (audioPlayer) {
       audioPlayer.play();
+      setIsPlaying(true); // 재생 상태를 true로 설정
     }
   };
 
   const pauseAudio = () => {
     if (audioPlayer) {
       audioPlayer.pause();
+      setIsPlaying(false); // 재생 상태를 false로 설정
     }
   };
 
   return (
     <div>
-      <img src={meditationData.meditationMedia[currentAudioIndex].imageUrl} alt="Meditation" />
+      <img
+        src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
+        alt="Meditation"
+      />
       <div>
-        <button onClick={playAudio}>재생</button>
-        <button onClick={pauseAudio}>일시 정지</button>
+        {/* 재생 버튼과 일시 정지 버튼을 조건부 렌더링 */}
+        {isPlaying ? (
+          <button onClick={pauseAudio}>II</button>
+        ) : (
+          <button onClick={playAudio}>▶</button>
+        )}
       </div>
-      <Footer setSelectedTab={setSelectedTab} />
+      <MeditationFooter setSelectedTab={setSelectedTab} />
     </div>
   );
 }
