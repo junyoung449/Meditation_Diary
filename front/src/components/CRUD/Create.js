@@ -4,6 +4,7 @@ import Footer from 'layouts/CalendarAndMemoAndFeed/Footer';
 
 function ImageUpload() {
   const [images, setImages] = useState([]);
+  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
   const memberIdx = localStorage.getItem('memberIdx');
   const accessToken = localStorage.getItem('accessToken');
 

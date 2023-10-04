@@ -7,6 +7,7 @@ import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
 function BeforeLogin() {
   const { color: bgColor, changeColor } = useContext(BackgroundColorContext);
   const [isWhiteContent, setIsWhiteContent] = useState(false);
+  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
 
   useEffect(() => {
     // body 요소의 클래스 변화를 감지하는 Mutation Observer 생성

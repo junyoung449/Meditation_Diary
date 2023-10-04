@@ -7,6 +7,7 @@ function MeditationDetail() {
   const meditationData = location.state.meditationData;
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [audioPlayer, setAudioPlayer] = useState(null);
+  const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
   console.log('meditationDetail에서 Data :', meditationData);
 
   useEffect(() => {
