@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Footer from 'layouts/CalendarAndMemoAndFeed/Footer';
 
 function ImageUpload() {
   const [images, setImages] = useState([]);
-  const memberIdx = localStorage.getItem('memberIdx')
-  const accessToken = localStorage.getItem('accessToken')
+  const memberIdx = localStorage.getItem('memberIdx');
+  const accessToken = localStorage.getItem('accessToken');
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
-    console.log('selectedImages :', selectedImages);
     setImages(selectedImages);
+
+    // 파일 선택 시 이미지 업로드 실행
+    uploadImages(selectedImages);
   };
 
-  const handleImageUpload = () => {
-    console.log('images :', images)
-    console.log('memberIdx :', memberIdx)
-    console.log('accessToken :', accessToken)
+  const uploadImages = (selectedImages) => {
     const formData = new FormData();
-    images.forEach((image, index) => {
-      console.log(index,'번째 이미지 :', image)
+    selectedImages.forEach((image) => {
       formData.append('images', image); // "images" 이름으로 이미지들을 전송
-      console.log(formData)
     });
     formData.append('memberIdx', memberIdx);
-    console.log(formData);
-    console.log([...formData.entries()]);
+
     axios
       .post('/api/meditation', formData, {
         headers: {
@@ -42,10 +39,13 @@ function ImageUpload() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       <h1>Image Upload</h1>
-      <input type="file" accept="image/*" multiple onChange={handleImageChange} />
-      <button onClick={handleImageUpload}>Upload Images</button>
+      <label htmlFor="imageInput" style={{ cursor: 'pointer' }}>
+        <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/footer/footer-center.png" alt="Upload Icon" width="100" height="100" />
+      </label>
+      <input type="file" id="imageInput" accept="image/*" multiple onChange={handleImageChange} style={{ display: 'none' }} />
+      <Footer setSelectedTab={setSelectedTab} />
     </div>
   );
 }

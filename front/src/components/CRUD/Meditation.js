@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
 
 function MeditationDetail() {
   const location = useLocation();
@@ -50,6 +51,7 @@ function MeditationDetail() {
         <button onClick={playAudio}>재생</button>
         <button onClick={pauseAudio}>일시 정지</button>
       </div>
+      <Footer setSelectedTab={setSelectedTab} />
     </div>
   );
 }

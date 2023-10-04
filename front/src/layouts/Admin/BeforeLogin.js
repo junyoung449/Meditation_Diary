@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import { Button } from "reactstrap";
+import Footer from "layouts/CalendarAndMemoAndFeed/Footer";
 
 function BeforeLogin() {
   const { color: bgColor, changeColor } = useContext(BackgroundColorContext);
@@ -59,7 +60,8 @@ function BeforeLogin() {
       >
         Login with Kakao
       </Button>
-      <FixedPlugin bgColor={bgColor} handleBgClick={changeColor} />
+      {/* <FixedPlugin bgColor={bgColor} handleBgClick={changeColor} /> */}
+      <Footer setSelectedTab={setSelectedTab} />
     </div>
   );
 }
