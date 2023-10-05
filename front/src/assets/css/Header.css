@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
+  background-color: inherit;
   padding: 10px 20px;
   /* border-bottom: 1px solid #e0e0e0; */
 }
@@ -29,7 +29,7 @@
 
 .profile-info .username {
   font-weight: bold;
-  color: black;
+  color: inherit;
   font-size: x-large;
   /* margin-bottom: 5px; */
 }
@@ -44,7 +44,7 @@
 }
 
 .header button {
-  background-color: #ffffff;
+  background-color: inherit;
   padding: 10px 20px;
   border: 2px solid transparent;
   border-radius: 20px;
@@ -52,10 +52,6 @@
   font-weight: 400;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.header button:hover {
-  /* background-color: #f0f0f0; */
 }
 
 .header button.active {
