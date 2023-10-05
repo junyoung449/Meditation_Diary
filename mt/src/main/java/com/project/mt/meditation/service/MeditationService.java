@@ -45,10 +45,10 @@ public class MeditationService {
     @Value("${default.voice}")
     public String defaultVoice;
 
-    public Long getMedia(Long memberIdx, String[] voiceUrl, String[] imageUrl) {
+    public Long getMedia(Long memberIdx, String voiceUrl, String[] imageUrl) {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        JSONObject requestBody = useJson.createRequestBody(memberIdx, voiceUrl == null ? defaultVoice : voiceUrl[0], imageUrl);
+        JSONObject requestBody = useJson.createRequestBody(memberIdx, voiceUrl == null ? null : voiceUrl, imageUrl);
 
         Map<String, List<String>> response = useJson.callConversionApi(requestBody);
 
