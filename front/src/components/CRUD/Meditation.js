@@ -12,6 +12,38 @@ function MeditationDetail() {
   const [selectedTab, setSelectedTab] = useState("Feed"); // 기본적으로 Feed 탭 선택
   console.log("meditationDetail에서 Data :", meditationData);
 
+  const dateStr = meditationData.date;
+  const date = new Date(dateStr);
+
+  // 월을 문자로 변환
+  const monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+  const month = monthNames[date.getMonth()];
+
+  // 일자 포맷팅 함수
+  function formatDate(date) {
+    const day = date.getDate();
+    let suffix = "th";
+    
+    // 일자에 따라서 "st", "nd", "rd"를 적용
+    if (day === 1 || day === 21 || day === 31) {
+      suffix = "st";
+    } else if (day === 2 || day === 22) {
+      suffix = "nd";
+    } else if (day === 3 || day === 23) {
+      suffix = "rd";
+    }
+
+    return `${month} ${day}${suffix}, ${date.getFullYear()}`;
+  }
+
+  const formattedDate = formatDate(date);
+  console.log(formattedDate); // "October 5th, 2023"
+
   useEffect(() => {
     // Audio 객체 생성
     const audio = new Audio();
@@ -51,12 +83,15 @@ function MeditationDetail() {
   };
 
   return (
-    <div className="meditation-detail-container"> {/* 스타일 클래스를 적용 */}
-      <img
-        src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
-        alt="Meditation"
-        className="meditation-image-container"
-      />
+    <div> {/* 스타일 클래스를 적용 */}
+      <div className="meditation-detail-container">
+        <img
+          src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
+          alt="Meditation"
+          className="meditation-image-container"
+        />
+        <h1>{formattedDate}</h1>
+      </div>
       <MeditationFooter
         setSelectedTab={setSelectedTab}
         isPlaying={isPlaying}
