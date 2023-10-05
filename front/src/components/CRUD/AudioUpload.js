@@ -6,7 +6,12 @@ function AudioUpload() {
   const navigate = useNavigate();
   const location = useLocation();
   const formData = new FormData();
-  const selectedImages = location.state; // ImageUpload 컴포넌트에서 전달된 FormData
+  const selectedImages = location.state.selectedImages; // ImageUpload 컴포넌트에서 전달된 FormData
+
+  console.log('selectedImages :', selectedImages);
+
+  const memberIdx = localStorage.getItem('memberIdx');
+  formData.append('memberIdx', memberIdx);
 
   selectedImages.forEach((image) => {
     formData.append('images', image); // 이미지를 FormData에 추가
