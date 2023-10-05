@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Waiting.css'; // 스타일 파일을 불러옵니다.
+import axios from "axios";
 
 function Waiting() {
   const navigate = useNavigate();
