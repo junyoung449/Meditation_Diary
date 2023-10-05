@@ -7,6 +7,8 @@ function AudioUpload() {
   const location = useLocation();
   const formData = location.state; // ImageUpload 컴포넌트에서 전달된 FormData
 
+  console.log('FormData from location state:', location.state);
+
   const handleAudioChange = (event) => {
     const selectedAudios = Array.from(event.target.files);
 
@@ -41,9 +43,7 @@ function AudioUpload() {
       .catch((error) => {
         console.error('Error uploading image(s) and audio:', error);
         console.log('formData 내용')
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
+        console.log(formData)
       });
   };
 
