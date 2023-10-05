@@ -1,17 +1,22 @@
 .meditation-detail-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .meditation-image-container {
-    width: 70%; /* 이미지 컨테이너의 가로 너비 설정 */
-  }
-  
-  .meditation-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* 수직 가운데 정렬을 위해 추가 */
+  padding: 20px;
+  text-align: center;
+}
+
+.meditation-image-container {
+  width: 70%; /* 이미지 컨테이너의 가로 너비 설정 */
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬을 위해 추가 */
+  justify-content: center; /* 수평 가운데 정렬을 위해 추가 */
+  overflow: hidden; /* 내부 내용이 넘치는 경우 숨김 처리 */
+}
+
+.meditation-image {
+  width: 100%; /* 이미지의 너비를 100%로 설정하여 가로 너비에 맞춥니다. */
+  height: 100%; /* 높이도 100%로 설정하여 정사각형이 되도록 합니다. */
+  object-fit: cover; /* 이미지가 컨테이너에 맞게 자동으로 조절됩니다. */
+}
