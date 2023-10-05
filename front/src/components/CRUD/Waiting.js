@@ -22,9 +22,22 @@ function Waiting() {
           window.location.href = "/welcome"
         } else {
           const idx = response.data.meditationList[response.data.meditationList.length-1].meditationIdx
-          navigate(`/meditation/${idx}`);
-        }
-      })
+          axios.get(`https://j9b205.p.ssafy.io/api/meditation/${idx}`, {
+            headers : {
+                'Authorization' : `Bearer ${accessToken}`,
+              }
+            })
+            .then((response) => {
+                console.log('meditationData :', response.data);
+                // setMeditationData(response.data);
+                // 클릭 시 해당 명상 글 상세 페이지로 이동
+                navigate(`/meditation/${index}`, { state: { meditationData: response.data } });
+            })
+            .catch((error) => {
+                console.error("Error fetching meditation data:", error);
+            });
+            }
+          })
       .catch((error) => {
         console.error("Error fetching meditation list:", error);
       });

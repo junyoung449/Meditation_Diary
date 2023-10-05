@@ -13,6 +13,7 @@ function ImageUpload() {
     });
 
     // 다른 페이지로 이동하면서 FormData를 전달
+    console.log('전달 전 formData :', formData)
     navigate('/audio-upload', { state: formData });
   };
 
