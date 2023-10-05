@@ -38,3 +38,7 @@
 .btn-right {
   border-radius: 0 15px 15px 0;
 }
+
+.dark-theme {
+  filter: invert(100%);
+}
