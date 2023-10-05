@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.mt.fileupload.util.UseJson;
 import com.project.mt.meditation.domain.Meditation;
@@ -44,15 +45,11 @@ public class MeditationService {
     @Value("${default.voice}")
     public String defaultVoice;
 
-    public Long getMedia(Long memberIdx, Long voiceIdx, String[] imageUrl) {
+    public Long getMedia(Long memberIdx, String voiceUrl, String[] imageUrl) {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Voice voice = null;
+        JSONObject requestBody = useJson.createRequestBody(memberIdx, voiceUrl == null ? null : voiceUrl, imageUrl);
 
-        if (voiceIdx != 0)
-            voice = voiceRepository.findVoiceByVoiceIdx(voiceIdx).orElseThrow(() -> new RestApiException(ErrorCode.VOICE_NOT_FOUND));
-
-        JSONObject requestBody = useJson.createRequestBody(memberIdx, voice == null ? defaultVoice : voice.getModelId(), imageUrl);
         Map<String, List<String>> response = useJson.callConversionApi(requestBody);
 
         String[] audioUrl = new String[imageUrl.length];

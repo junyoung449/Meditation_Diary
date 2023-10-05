@@ -14,6 +14,8 @@ import com.project.mt.fileupload.config.AwsS3Uploader;
 import com.project.mt.meditation.dto.response.MeditationListResponseDto;
 import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
+import com.project.mt.voice.dto.request.VoiceRequestDto;
+import com.project.mt.voice.service.VoiceService;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,16 +26,28 @@ import org.springframework.web.multipart.MultipartFile;
 public class MeditationController {
 
 	private final MeditationService meditationService;
+	private final VoiceService voiceService;
 	private final AwsS3Uploader awsS3Uploader;
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> save(@RequestParam List<MultipartFile> images,
-								  @RequestParam Long memberIdx, @RequestParam(required = false) Long voiceIdx) throws IOException {
+								  @RequestParam Long memberIdx, @RequestParam(required = false) MultipartFile voice) throws IOException {
 		Map<String, Object> response = new HashMap<>();
+
+		List<MultipartFile> voiceList = new ArrayList<>();
+		String[] voiceUrl = new String[1];
+
+		if (voice != null) {
+			voiceList.add(voice);
+			voiceUrl = awsS3Uploader.upload(voiceList, "voice");
+		}
 
 		String[] imageUrl = awsS3Uploader.upload(images, "image");
 
-		Long meditationIdx = meditationService.getMedia(memberIdx, voiceIdx == null ? 0 : voiceIdx, imageUrl);
+		Long meditationIdx = meditationService.getMedia(memberIdx, voiceUrl[0] == null ? null : voiceUrl[0], imageUrl);
+
+		// response.put("imageUrl", imageUrl[0]);
+		// response.put("voiceUrl", voiceUrl[0]);
 
 		response.put("meditationIdx", meditationIdx);
 
