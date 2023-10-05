@@ -1,5 +1,3 @@
-# ElevenLabs 실행용
-
 import requests
 
 # -*- coding: utf-8 -*-
@@ -55,12 +53,11 @@ class Audio(BaseModel):
 
 class ImageURLRequest(BaseModel):
     images: List[str]
-    voice_id: str
+    voiceUrl: str
 
 
 @app.post("/ai/text")
 def ipynb(imageRequest: ImageURLRequest):
-    audioUrl = []
     fileName = []
 
     PAT = os.getenv("CLARIFAI_API_KEY")
@@ -141,7 +138,7 @@ def ipynb(imageRequest: ImageURLRequest):
     print(result)
 
     CHUNK_SIZE = 1024
-    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + imageRequest.voice_id
+    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + "모델 아이디"
 
     headers = {
         "Accept": "audio/mpeg",
