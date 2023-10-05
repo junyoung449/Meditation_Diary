@@ -21,7 +21,11 @@ function Feed() {
       }
     })
     .then((response) => {
-      setMeditationList(response.data.meditationList);
+      if (response.data.meditationList.length === 0) {
+        window.location.href = "/welcome"
+      } else {
+        setMeditationList(response.data.meditationList);
+      }
     })
     .catch((error) => {
       console.error("Error fetching meditation list:", error);
