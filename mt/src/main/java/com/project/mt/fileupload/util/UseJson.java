@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UseJson {
 
-	public JSONObject createRequestBody(Long memberIdx, String modelId, String[] imageUrl){
+	public JSONObject createRequestBody(Long memberIdx, String voiceUrl, String[] imageUrl){
 		JSONObject body = new JSONObject();
 
 		JSONArray images = new JSONArray(); // JSONArray로 변경
@@ -35,7 +35,7 @@ public class UseJson {
 			images.add(imageUrl[i]);
 		}
 
-		body.put("voice_id", modelId);
+		body.put("voiceUrl", voiceUrl);
 		body.put("images", images);
 
 		return body;

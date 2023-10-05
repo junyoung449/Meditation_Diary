@@ -8,18 +8,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/calendar")
-@CrossOrigin(origins = "*")
-@RequiredArgsConstructor
-@Slf4j
-public class CalendarController {
-
-    private final MeditationService meditationService;
-
+// @RestController
+// @RequestMapping("/api/calendar")
+// @CrossOrigin(origins = "*")
+// @RequiredArgsConstructor
+// @Slf4j
+// public class CalendarController {
+//
+//     private final MeditationService meditationService;
+//
 //    @PostMapping
 //    public ResponseEntity<?> findCalendarByMemberIdx(@RequestBody CalendarRequestDto calendarRequestDto) {
 //        meditationService.findCalendarByMemberIdx(calendarRequestDto);
 //    }
-
-}
+//
+// }
