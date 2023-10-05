@@ -272,7 +272,7 @@ def makeBackGroundMusic(name):
     background_music = AudioSegment.from_mp3("./audio/back.mp3")
 
     # 원본 mp3 파일 로드
-    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3") - 2
+    original_audio = AudioSegment.from_mp3("./audio/" + name + ".mp3") - 5
 
     # 로컬에 있는 mp3 파일 삭제
     os.remove("./audio/" + name + ".mp3")
