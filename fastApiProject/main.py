@@ -61,7 +61,7 @@ def TTS(voice_id, result):
     if voice_id:
         elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
     else:
-        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/1Y8VEQXMwbo4IxJO2JKy"
 
     headers = {
         "Accept": "audio/mpeg",
@@ -205,7 +205,8 @@ def ipynb(imageRequest: ImageURLRequest):
         new_voice_id = add("custom", input_voice).json()["voice_id"]
     print(new_voice_id)
     name = TTS(f"{new_voice_id}", result)
-    delete(f"{new_voice_id}")
+    if input_voice:
+        delete(f"{new_voice_id}")
 
     makeBackGroundMusic(name)
     fileName.append(name + ".mp3")
