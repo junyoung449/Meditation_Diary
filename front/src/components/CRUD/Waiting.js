@@ -14,6 +14,7 @@ function Waiting() {
   };
 
   useEffect(() => {
+    document.body.classList.add('white-content');
     // 오디오 파일 생성
     audio = new Audio('/audio/loading_naration.wav');
     // 오디오 재생 종료 시 페이지 이동 예약
@@ -23,6 +24,7 @@ function Waiting() {
 
     // 컴포넌트 언마운트 시 리소스 해제
     return () => {
+      document.body.classList.remove('white-content');
       if (audio) {
         audio.pause();
         audio.removeEventListener('ended', () => {});
@@ -73,7 +75,7 @@ function Waiting() {
 
   return (
     <div className="audio-player">
-      <div className="loading-text">명상을 준비하는 시간입니다</div>
+      <div className="loading-text">명상을 준비하는 시간입니다.</div>
       <button className="audio-button" onClick={playAudio}>
         <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/play.png" alt="Play Audio" />
       </button>
