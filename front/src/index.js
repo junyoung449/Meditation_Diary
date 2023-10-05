@@ -40,6 +40,8 @@ import Waiting from "components/CRUD/Waiting";
 import AudioUpload from "components/CRUD/AudioUpload";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+document.body.classList.add('white-content');
+
 root.render(
   <ThemeContextWrapper>
     <BackgroundColorWrapper>
