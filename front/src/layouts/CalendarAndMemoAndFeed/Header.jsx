@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../../assets/css/Header.css';
 import axios from 'axios';
 import { ThemeContext, themes } from 'contexts/ThemeContext';
@@ -7,21 +7,22 @@ function Header({ selectedTab, setSelectedTab }) {
   const [userName, setUserName] = useState(''); // 초기 상태는 빈 문자열
   const { theme, changeTheme } = useContext(ThemeContext);
 
+  // 테마 변경에 반응하여 headerClass를 업데이트
+  const headerClass = theme === themes.light ? 'light-theme' : 'dark-theme';
+
   useEffect(() => {
     const memberIdx = localStorage.getItem('memberIdx');
-    const accessToken = localStorage.getItem('accessToken'); 
+    const accessToken = localStorage.getItem('accessToken');
 
     // axios를 사용하여 서버로 요청을 보냅니다.
     axios.get(`https://j9b205.p.ssafy.io/api/member/${memberIdx}`, {
       headers: {
-          Authorization: `Bearer ${accessToken}`, // Bearer 토큰을 헤더에 추가
+        Authorization: `Bearer ${accessToken}`, // Bearer 토큰을 헤더에 추가
       },
     }).then((response) => {
-        setUserName(response.data.name);
+      setUserName(response.data.name);
     })
-  }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때만 실행됩니다.
-
-  const headerClass = theme === themes.light ? 'light-theme' : 'dark-theme';
+  }, [theme]); // 테마 변경에 반응
 
   return (
     <div className="header">
