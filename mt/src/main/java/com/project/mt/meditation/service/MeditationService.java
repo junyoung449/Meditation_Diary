@@ -49,6 +49,7 @@ public class MeditationService {
         Member member = memberRepository.findMemberByMemberIdx(memberIdx).orElseThrow(() -> new RestApiException(ErrorCode.MEMBER_NOT_FOUND));
 
         JSONObject requestBody = useJson.createRequestBody(memberIdx, voiceUrl == null ? defaultVoice : voiceUrl[0], imageUrl);
+
         Map<String, List<String>> response = useJson.callConversionApi(requestBody);
 
         String[] audioUrl = new String[imageUrl.length];
