@@ -7,6 +7,15 @@ import { BackgroundColorContext } from "../../contexts/BackgroundColorContext";
 import FixedPlugin from "../../components/FixedPlugin/FixedPlugin";
 
 function Frame() {
+  const isLogined = localStorage.getItem('islogined');
+  if (isLogined === 'true') {
+    // 사용자가 로그인한 상태
+    ;
+  } else {
+    // islogined 항목이 존재하지 않거나 다른 값인 경우
+    window.location.href = '/BeforeLogin'
+  }
+
   const [selectedTab, setSelectedTab] = useState('Feed'); // 기본적으로 Feed 탭 선택
   const { color: bgColor, changeColor } = useContext(BackgroundColorContext);
   const [isWhiteContent, setIsWhiteContent] = useState(false);
