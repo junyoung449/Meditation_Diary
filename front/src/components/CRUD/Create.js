@@ -6,15 +6,7 @@ function ImageUpload() {
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
-    const formData = new FormData();
-    
-    selectedImages.forEach((image) => {
-      formData.append('images', image); // 이미지를 FormData에 추가
-    });
-
-    // 다른 페이지로 이동하면서 FormData를 전달
-    console.log('전달 전 formData :', formData)
-    navigate('/audio-upload', { state: formData });
+    navigate('/audio-upload', { state: selectedImages });
   };
 
   return (
