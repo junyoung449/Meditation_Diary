@@ -55,6 +55,68 @@ class ImageURLRequest(BaseModel):
     images: List[str]
     voiceUrl: str
 
+def TTS(voice_id, result):
+    
+    CHUNK_SIZE = 1024
+    if voice_id:
+        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
+    else:
+        elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/jDf0qpioBfjTxjqlFBsW"
+
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
+    }
+
+    elevenlabs_data = {
+        "text": result,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.6,
+            "similarity_boost": 1,
+            "style": 0,
+            "use_speaker_boost": 'false'
+        }
+    }
+
+    name = secrets.token_hex(nbytes=16)
+
+    response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
+    with open("./audio/" + name + ".mp3", 'wb') as f:
+        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+            if chunk:
+                f.write(chunk)
+    return name
+
+def add(id, file):
+    url = "https://api.elevenlabs.io/v1/voices/add"
+    
+    headers = {
+    "Accept": "application/json",
+    "xi-api-key": "4825d47028ddf82c66449a5b4429b775"
+    }
+
+    data = {
+        'name': id
+    }
+    files = {
+        ('files', (file, open(file, 'rb'), 'audio/mpeg'))
+    }
+    response = requests.post(url, headers=headers, data=data, files=files)
+    return response
+
+def delete(voice_id):
+    
+    headers = {
+    "Accept": "application/json",
+    "xi-api-key": "4825d47028ddf82c66449a5b4429b775"
+        }
+    url = "https://api.elevenlabs.io/v1/voices/" + voice_id
+    response = requests.delete(url, headers=headers)
+    return response
+
+
 
 @app.post("/ai/text")
 def ipynb(imageRequest: ImageURLRequest):
@@ -137,33 +199,13 @@ def ipynb(imageRequest: ImageURLRequest):
 
     print(result)
 
-    CHUNK_SIZE = 1024
-    elevenlabs_url = "https://api.elevenlabs.io/v1/text-to-speech/" + "모델 아이디"
-
-    headers = {
-        "Accept": "audio/mpeg",
-        "Content-Type": "application/json",
-        "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
-    }
-
-    elevenlabs_data = {
-        "text": result,
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {
-            "stability": 0.6,
-            "similarity_boost": 1,
-            "style": 0,
-            "use_speaker_boost": 'false'
-        }
-    }
-
-    name = secrets.token_hex(nbytes=16)
-
-    response = requests.post(elevenlabs_url, json=elevenlabs_data, headers=headers)
-    with open("./audio/" + name + ".mp3", 'wb') as f:
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            if chunk:
-                f.write(chunk)
+    input_voice = imageRequest.voiceUrl
+    new_voice_id = ""
+    if input_voice:
+        new_voice_id = add("custom", input_voice).json()["voice_id"]
+    print(new_voice_id)
+    name = TTS(f"{new_voice_id}", result)
+    delete(f"{new_voice_id}")
 
     makeBackGroundMusic(name)
     fileName.append(name + ".mp3")
