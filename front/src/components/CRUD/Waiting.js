@@ -6,25 +6,29 @@ import axios from "axios";
 function Waiting() {
   const navigate = useNavigate();
   const [audioPlayed, setAudioPlayed] = useState(false);
+  let audio = null;
+
+  const playAudio = () => {
+    if (audio) {
+      audio.play();
+    }
+  };
 
   useEffect(() => {
     // 오디오 파일 생성
-    const audio = new Audio('/assets/naration/loading_naration.wav');
+    audio = new Audio('/assets/naration/loading_naration.wav');
 
     // 오디오 재생 종료 시 페이지 이동 예약
     audio.addEventListener('ended', () => {
       setAudioPlayed(true);
     });
 
-    // 사용자 동작 (예: 버튼 클릭)으로 오디오 시작
-    const playAudio = () => {
-      audio.play();
-    };
-
     // 컴포넌트 언마운트 시 리소스 해제
     return () => {
-      audio.pause();
-      audio.removeEventListener('ended', () => {});
+      if (audio) {
+        audio.pause();
+        audio.removeEventListener('ended', () => {});
+      }
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
