@@ -43,16 +43,7 @@ function AudioUpload() {
           'Authorization': `Bearer ${accessToken}`,
         },
       })
-      .then((response) => {
-        // 업로드 완료 후 처리
-        console.log('Image(s) and audio uploaded successfully:', response.data);
-        navigateToNextPage(); // 업로드 완료 후 다음 페이지로 이동
-      })
-      .catch((error) => {
-        console.error('Error uploading image(s) and audio:', error);
-        console.log('formData 내용')
-        console.log(formData)
-      });
+    navigateToNextPage(); // 업로드 완료 후 다음 페이지로 이동
   };
 
   return (
