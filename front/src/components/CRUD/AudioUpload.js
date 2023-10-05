@@ -49,11 +49,11 @@ function AudioUpload() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       {/* 이미지 아이콘을 클릭하면 파일 선택(input)이 클릭되도록 설정 */}
-      <label htmlFor="audioInput" style={{ cursor: 'pointer' }}>
+      <label htmlFor="audioInput" style={{ cursor: 'pointer', marginBottom: 10}}>
         <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/upload.png" alt="Upload Icon"/>
       </label>
       <input type="file" id="audioInput" accept="audio/*" multiple onChange={handleAudioChange} style={{ display: 'none' }} />
-      <h1>Upload Audio</h1>
+      <h2>Upload Audio</h2>
       <button onClick={upload}>Skip</button> {/* 스킵 버튼 */}
     </div>
   );
