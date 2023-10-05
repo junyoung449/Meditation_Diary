@@ -83,8 +83,8 @@ function MeditationDetail() {
   };
 
   return (
-    <div> {/* 스타일 클래스를 적용 */}
-      <div className="meditation-detail-container">
+    <div>
+      <div className="meditation-detail-container"> {/* 스타일 클래스를 적용 */}
         <img
           src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
           alt="Meditation"
