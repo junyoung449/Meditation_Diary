@@ -29,7 +29,7 @@
 
 .profile-info .username {
   font-weight: bold;
-  color: inherit;
+  color: #000000;
   font-size: x-large;
   /* margin-bottom: 5px; */
 }
@@ -64,5 +64,5 @@
 }
 
 .header button.dark-theme {
-  color: #ffffff;
+  color: #000000;
 }
