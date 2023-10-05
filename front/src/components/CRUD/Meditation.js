@@ -88,7 +88,7 @@ function MeditationDetail() {
         <img
           src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
           alt="Meditation"
-          className="meditation-image-container"
+          className="meditation-image"
         />
         <h1>{formattedDate}</h1>
       </div>
