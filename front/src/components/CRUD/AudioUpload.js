@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function AudioUpload() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(new FormData());
+  const location = useLocation();
+  const formData = location.state; // ImageUpload 컴포넌트에서 전달된 FormData
 
   const handleAudioChange = (event) => {
     const selectedAudios = Array.from(event.target.files);
@@ -24,21 +25,23 @@ function AudioUpload() {
   const upload = () => {
     const accessToken = localStorage.getItem('accessToken');
     
-        // axios를 사용하여 FormData를 서버로 전송
-        axios
-        .post('/api/meditation', formData, {
+    // axios를 사용하여 FormData를 서버로 전송
+    axios
+      .post('/api/meditation', formData, {
         headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${accessToken}`,
         },
-        })
-        .catch((error) => {
-        console.error('Error uploading audio:', error);
-        });
-
-        // 업로드가 성공 전에 페이지를 이동
-        navigateToNextPage();
-    };
+      })
+      .then((response) => {
+        // 업로드 완료 후 처리
+        console.log('Image(s) and audio uploaded successfully:', response.data);
+        navigateToNextPage(); // 업로드 완료 후 다음 페이지로 이동
+      })
+      .catch((error) => {
+        console.error('Error uploading image(s) and audio:', error);
+      });
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>

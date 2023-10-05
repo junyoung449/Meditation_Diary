@@ -8,7 +8,7 @@ function Waiting() {
 
   useEffect(() => {
     // 오디오 파일 생성
-    const audio = new Audio('/src/assets/naration/loading_naration.wav');
+    const audio = new Audio('/assets/naration/loading_naration.wav');
 
     // 오디오 재생 종료 시 페이지 이동
     audio.addEventListener('ended', () => {
