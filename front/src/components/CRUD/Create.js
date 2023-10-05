@@ -1,42 +1,19 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-// import Footer from 'layouts/CalendarAndMemoAndFeed/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function ImageUpload() {
-  const [images, setImages] = useState([]);
-  // const [selectedTab, setSelectedTab] = useState('Calendar'); // 기본적으로 Calendar 탭 선택
-  const memberIdx = localStorage.getItem('memberIdx');
-  const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
-    setImages(selectedImages);
-
-    // 파일 선택 시 이미지 업로드 실행
-    uploadImages(selectedImages);
-  };
-
-  const uploadImages = (selectedImages) => {
     const formData = new FormData();
+    
     selectedImages.forEach((image) => {
-      formData.append('images', image); // "images" 이름으로 이미지들을 전송
+      formData.append('images', image); // 이미지를 FormData에 추가
     });
-    formData.append('memberIdx', memberIdx);
 
-    axios
-      .post('/api/meditation', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        // 이미지 업로드 성공 후 응답 처리
-        console.log('Image(s) uploaded successfully:', response.data);
-      })
-      .catch((error) => {
-        console.error('Error uploading image(s):', error);
-      });
+    // 다른 페이지로 이동하면서 FormData를 전달
+    navigate('/audio-upload', { state: formData });
   };
 
   return (

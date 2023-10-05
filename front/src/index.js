@@ -36,6 +36,7 @@ import Meditation from "components/CRUD/Meditation";
 
 import Frame from "layouts/CalendarAndMemoAndFeed/Frame"
 import MobileWelcome from "components/CRUD/Welcome";
+import Waiting from "components/CRUD/Waiting";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -51,6 +52,7 @@ root.render(
           <Route path="/frame" element={<Frame/>}/>
           <Route path="/meditation/:index" element={<Meditation />} />
           <Route path="/welcome" element={<MobileWelcome/>}/>
+          <Route path="/waiting" element={<Waiting/>}/>
           <Route
             path="*"
             element={<Navigate to="/frame" replace />}
