@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import "./Welcome.css"
+import { useNavigate } from "react-router-dom";
+import "./Welcome.css";
 
 function MobileWelcome() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [redirectTo, setRedirectTo] = useState(null);
 
   useEffect(() => {
@@ -21,14 +21,14 @@ function MobileWelcome() {
   useEffect(() => {
     // redirectTo가 설정되면 페이지를 리다이렉트합니다.
     if (redirectTo) {
-      history.push(redirectTo);
+      navigate(redirectTo);
     }
-  }, [redirectTo, history]);
+  }, [redirectTo, navigate]);
 
   return (
     <div className="mobile-welcome">
-        <p>사진을 업로드하고</p>
-        <p>첫 명상에 빠져보세요</p>
+      <p>사진을 업로드하고</p>
+      <p>첫 명상에 빠져보세요</p>
     </div>
   );
 }
