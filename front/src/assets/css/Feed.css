@@ -2,12 +2,12 @@
 .content {
     margin: 0; /* 기본 마진 제거 */
     padding: 0; /* 기본 패딩 제거 */
-  }
+}
   
-  /* MeditationThumbnail 컴포넌트에 적용되는 CSS */
-  .thumbnail img {
+/* MeditationThumbnail 컴포넌트에 적용되는 CSS */
+.thumbnail img {
     border-radius: 0; /* 이미지 테두리를 둥글게 하지 않음 */
     margin: 0; /* 이미지 간 간격 제거 */
     padding: 0; /* 이미지 간 간격 제거 */
-  }
+}
   

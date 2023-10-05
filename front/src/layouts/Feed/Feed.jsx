@@ -4,13 +4,12 @@ import MeditationThumbnail from "../../views/Thumbnail";
 import "../../assets/css/Feed.css"
 
 import {
-    Row,
-    Col,
-  } from "reactstrap";
-
+  Row,
+  Col,
+} from "reactstrap";
 
 function Feed() {
-    const [meditationList, setMeditationList] = useState([]);
+  const [meditationList, setMeditationList] = useState([]);
 
   useEffect(() => {
     const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
@@ -21,12 +20,12 @@ function Feed() {
         'Authorization': `Bearer ${accessToken}`,
       }
     })
-      .then((response) => {
-        setMeditationList(response.data.meditationList);
-      })
-      .catch((error) => {
-        console.error("Error fetching meditation list:", error);
-      });
+    .then((response) => {
+      setMeditationList(response.data.meditationList);
+    })
+    .catch((error) => {
+      console.error("Error fetching meditation list:", error);
+    });
   }, []);
 
   // 3열 그리드로 나타내기 위한 함수
@@ -37,7 +36,7 @@ function Feed() {
     for (let i = 0; i < meditationList.length; i += itemsPerRow) {
       const row = meditationList.slice(i, i + itemsPerRow);
       const cols = row.map((item) => (
-        <Col xs='4'>
+        <Col xs='4' className="no-padding"> {/* 여기에 "no-padding" 클래스 추가 */}
           <MeditationThumbnail
             index={item.meditationIdx}
             thumbnailImageUrl={item.imageUrl}
@@ -45,7 +44,7 @@ function Feed() {
         </Col>
       ));
       grid.push(
-        <Row>
+        <Row className="no-margin"> {/* 여기에 "no-margin" 클래스 추가 */}
           {cols}
         </Row>
       );
