@@ -34,6 +34,10 @@
   /* margin-bottom: 5px; */
 }
 
+.profile-info .username .light-theme {
+  color: #000000;
+}
+
 .header .description {
   margin-bottom: 15px;
 }
@@ -57,4 +61,8 @@
 .header button.active {
   /* background-color: #dcdcdc; */
   border-color: gray;
+}
+
+.header button.dark-theme {
+  color: #ffffff;
 }

@@ -11,11 +11,11 @@ function ImageUpload() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      <label htmlFor="imageInput" style={{ cursor: 'pointer' }}>
+      <label htmlFor="imageInput" style={{ cursor: 'pointer', marginBottom: 10 }}>
         <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/upload.png" alt="Upload Icon"/>
       </label>
       <input type="file" id="imageInput" accept="image/*" multiple onChange={handleImageChange} style={{ display: 'none' }} />
-      <h1>Upload Image</h1>
+      <h2>Upload Image</h2>
       {/* <Footer setSelectedTab={setSelectedTab} /> */}
     </div>
   );

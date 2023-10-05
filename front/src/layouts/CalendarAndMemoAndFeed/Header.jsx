@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import '../../assets/css/Header.css';
 import axios from 'axios';
+import { ThemeContext, themes } from 'contexts/ThemeContext';
 
 function Header({ selectedTab, setSelectedTab }) {
   const [userName, setUserName] = useState(''); // 초기 상태는 빈 문자열
+  const { theme, changeTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const memberIdx = localStorage.getItem('memberIdx');
@@ -19,11 +21,13 @@ function Header({ selectedTab, setSelectedTab }) {
     })
   }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때만 실행됩니다.
 
+  const headerClass = theme === themes.light ? 'light-theme' : 'dark-theme';
+
   return (
     <div className="header">
       <div className="profile-container">
         <div className="profile-info">
-          <span className="username">{userName}</span>
+          <span className={`username ${headerClass}`}>{userName}</span>
         </div>
         <img src="https://i.namu.wiki/i/bCmE_8XrnEYeEKlbme2ZS8rsG6dcB1vGD-UJtxvGncvXuYL9fiBqL8Fk_6cQ58EKJYTyyw9mA0LWK3yIaRYQow.webp" alt="Profile" className="profile-image" />
       </div>
@@ -43,8 +47,8 @@ function Header({ selectedTab, setSelectedTab }) {
           ''}
       </div>
       <div className="navigation-buttons">
-        <button onClick={() => setSelectedTab('Feed')} className={selectedTab === 'Feed' ? 'active' : ''}>Feed</button>
-        <button onClick={() => setSelectedTab('Calendar')} className={selectedTab === 'Calendar' ? 'active' : ''}>Calendar</button>
+        <button onClick={() => setSelectedTab('Feed')} className={`${selectedTab === 'Feed' ? 'active' : ''} ${headerClass}`}>Feed</button>
+        <button onClick={() => setSelectedTab('Calendar')} className={`${selectedTab === 'Calendar' ? 'active' : ''} ${headerClass}`}>Calendar</button>
       </div>
     </div>
   );
