@@ -1,3 +1,8 @@
+import React, { useContext } from 'react';
+import { ThemeContext, themes } from 'contexts/ThemeContext';
+import { useNavigate } from 'react-router-dom';
+import '../../assets/css/Footer.css';
+
 function MeditationFooter({ setSelectedTab, isPlaying, onPlayClick, onPauseClick }) {
   const navigate = useNavigate();
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -34,3 +39,5 @@ function MeditationFooter({ setSelectedTab, isPlaying, onPlayClick, onPauseClick
     </div>
   );
 }
+
+export default MeditationFooter;
