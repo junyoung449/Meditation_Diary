@@ -74,8 +74,10 @@ function Waiting() {
 
   return (
     <div className="audio-player">
-      <p className="loading-text">명상 파일 로딩 중입니다...</p>
-      <button onClick={playAudio}>오디오 재생</button>
+      <div className="loading-text">명상을 준비하는 시간입니다</div>
+      <button className="audio-button" onClick={playAudio}>
+        <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/play.png" alt="Play Audio" />
+      </button>
     </div>
   );
 }
