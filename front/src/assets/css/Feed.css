@@ -32,3 +32,8 @@
     transform: scale(1.1); /* 마우스를 올리면 이미지가 확대됩니다. */
   }
   
+  .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
