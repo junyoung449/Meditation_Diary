@@ -52,7 +52,7 @@ public class MeditationService {
         if (voiceIdx != 0)
             voice = voiceRepository.findVoiceByVoiceIdx(voiceIdx).orElseThrow(() -> new RestApiException(ErrorCode.VOICE_NOT_FOUND));
 
-        JSONObject requestBody = useJson.createRequestBody(memberIdx, voice.getModelId() == null ? defaultVoice : voice.getModelId(), imageUrl);
+        JSONObject requestBody = useJson.createRequestBody(memberIdx, voice == null ? defaultVoice : voice.getModelId(), imageUrl);
         Map<String, List<String>> response = useJson.callConversionApi(requestBody);
 
         String[] audioUrl = new String[imageUrl.length];
