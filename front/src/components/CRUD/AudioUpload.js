@@ -53,8 +53,20 @@ function AudioUpload() {
         <img src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/upload.png" alt="Upload Icon"/>
       </label>
       <input type="file" id="audioInput" accept="audio/*" multiple onChange={handleAudioChange} style={{ display: 'none' }} />
-      <h2>Upload Audio</h2>
-      <button onClick={upload}>Skip</button> {/* 스킵 버튼 */}
+      <h2 style={{ fontWeight: 'bold', marginTop: '30px', color: '#000000' }}>Upload Your Audio</h2>
+      {/* 이미지로 대체된 스킵 버튼 */}
+      <img
+        src="https://s3.ap-northeast-2.amazonaws.com/b205.s3test.bucket/image/skip.png"
+        alt="Skip"
+        onClick={upload}
+        style={{
+          cursor: 'pointer',
+          position: 'fixed',
+          bottom: '30px',
+          right: '30px',
+        }}
+      />
+      <p style={{ marginBottom: '25px' }}>Skip</p> {/* Skip 텍스트 추가 */}
     </div>
   );
 }
