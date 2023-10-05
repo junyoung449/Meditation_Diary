@@ -35,6 +35,7 @@ import BeforeLogin from "layouts/Admin/BeforeLogin";
 import Meditation from "components/CRUD/Meditation";
 
 import Frame from "layouts/CalendarAndMemoAndFeed/Frame"
+import MobileWelcome from "components/CRUD/Welcome";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -49,9 +50,10 @@ root.render(
           <Route path="/beforelogin" element={<BeforeLogin />} />
           <Route path="/frame" element={<Frame/>}/>
           <Route path="/meditation/:index" element={<Meditation />} />
+          <Route path="/welcome" element={<MobileWelcome/>}/>
           <Route
             path="*"
-            element={<Navigate to="/admin/feed" replace />}
+            element={<Navigate to="/frame" replace />}
           />
         </Routes>
       </BrowserRouter>
