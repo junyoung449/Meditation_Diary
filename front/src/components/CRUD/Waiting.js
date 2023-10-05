@@ -1,16 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Waiting.css'; // 스타일 파일을 불러옵니다.
 import axios from "axios";
 
 function Waiting() {
   const navigate = useNavigate();
+  const [audioPlayed, setAudioPlayed] = useState(false);
 
   useEffect(() => {
-    // 2분 5초(125000 밀리초) 후에 다른 페이지로 이동
-    const redirectTimeout = setTimeout(() => {
-        const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
+    // 오디오 파일 생성
+    const audio = new Audio('/assets/naration/loading_naration.wav');
+
+    // 오디오 재생 종료 시 페이지 이동 예약
+    audio.addEventListener('ended', () => {
+      setAudioPlayed(true);
+    });
+
+    // 사용자 동작 (예: 버튼 클릭)으로 오디오 시작
+    const playAudio = () => {
+      audio.play();
+    };
+
+    // 컴포넌트 언마운트 시 리소스 해제
+    return () => {
+      audio.pause();
+      audio.removeEventListener('ended', () => {});
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 오디오 재생 후 페이지 이동
+  useEffect(() => {
+    if (audioPlayed) {
+      const memberIdx = parseInt(localStorage.getItem('memberIdx'),10);
       const accessToken = localStorage.getItem('accessToken');
+
       // 게시글 리스트를 가져오는 요청
       axios.get(`https://j9b205.p.ssafy.io/api/meditation/list/${memberIdx}`, {
         headers: {
@@ -19,46 +44,22 @@ function Waiting() {
       })
       .then((response) => {
         if (response.data.meditationList.length === 0) {
-          window.location.href = "/welcome"
+          navigate('/welcome');
         } else {
           const idx = response.data.meditationList[response.data.meditationList.length-1].meditationIdx
-          axios.get(`https://j9b205.p.ssafy.io/api/meditation/${idx}`, {
-            headers : {
-                'Authorization' : `Bearer ${accessToken}`,
-              }
-            })
-            .then((response) => {
-                console.log('meditationData :', response.data);
-                // setMeditationData(response.data);
-                // 클릭 시 해당 명상 글 상세 페이지로 이동
-                navigate(`/meditation/${index}`, { state: { meditationData: response.data } });
-            })
-            .catch((error) => {
-                console.error("Error fetching meditation data:", error);
-            });
-            }
-          })
+          navigate(`/meditation/${idx}`);
+        }
+      })
       .catch((error) => {
         console.error("Error fetching meditation list:", error);
       });
-      }, 125000);
-  
-      // 컴포넌트가 언마운트될 때 타임아웃 정리
-      return () => clearTimeout(redirectTimeout);
-    }, [navigate]);
+    }
+  }, [audioPlayed, navigate]);
 
   return (
     <div className="audio-player">
       <p className="loading-text">명상 파일 로딩 중입니다...</p>
-      <iframe
-        title="Audio Player"
-        width="0"
-        height="0"
-        src="/assets/naration/loading_naration.wav"
-        frameborder="0"
-        allow="autoplay"
-        visibility="hidden"
-      ></iframe>
+      <button onClick={playAudio}>오디오 재생</button>
     </div>
   );
 }
