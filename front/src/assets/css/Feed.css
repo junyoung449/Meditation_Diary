@@ -1,39 +1,38 @@
 /* Feed 컴포넌트에 적용되는 CSS */
 .content {
-    margin: 0; /* 기본 마진 제거 */
-    padding: 0; /* 기본 패딩 제거 */
-}
-  
-/* MeditationThumbnail 컴포넌트에 적용되는 CSS */
-.thumbnail img {
-    border-radius: 0; /* 이미지 테두리를 둥글게 하지 않음 */
-    margin: 0; /* 이미지 간 간격 제거 */
-    padding: 0; /* 이미지 간 간격 제거 */
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
 }
 
-.MeditationThumbnail {
-    width: 100%; /* 썸네일 이미지의 가로 너비를 100%로 설정하여 부모 컨테이너에 맞게 조절합니다. */
-    padding-bottom: 100%; /* 썸네일 이미지의 높이를 가로 너비와 동일하게 만듭니다. */
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .MeditationThumbnail img {
-    object-fit: cover; /* 이미지가 썸네일 컨테이너에 맞게 잘릴 수 있도록 설정합니다. */
-    width: 100%; /* 이미지를 100%로 표시하여 썸네일 컨테이너에 맞춥니다. */
-    height: 100%; /* 이미지를 100%로 표시하여 썸네일 컨테이너에 맞춥니다. */
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: transform 0.2s ease; /* 이미지 변환에 애니메이션을 추가합니다. */
-  }
-  
-  .MeditationThumbnail:hover img {
-    transform: scale(1.1); /* 마우스를 올리면 이미지가 확대됩니다. */
-  }
-  
-  .no-padding {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  
+/* .thumbnail 클래스에 적용되는 CSS */
+.thumbnail img {
+  border-radius: 0; /* 이미지 테두리를 둥글게 하지 않음 */
+  margin: 0; /* 이미지 간 간격 제거 */
+  padding: 0; /* 이미지 간 간격 제거 */
+}
+
+.thumbnail {
+  width: 100%; /* 썸네일 이미지의 가로 너비를 100%로 설정하여 부모 컨테이너에 맞게 조절합니다. */
+  padding-bottom: 100%; /* 썸네일 이미지의 높이를 가로 너비와 동일하게 만듭니다. */
+  position: relative;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  object-fit: cover; /* 이미지가 썸네일 컨테이너에 맞게 잘릴 수 있도록 설정합니다. */
+  width: 100%; /* 이미지를 100%로 표시하여 썸네일 컨테이너에 맞춥니다. */
+  height: 100%; /* 이미지를 100%로 표시하여 썸네일 컨테이너에 맞춥니다. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.2s ease; /* 이미지 변환에 애니메이션을 추가합니다. */
+}
+
+.thumbnail:hover img {
+  transform: scale(1.1); /* 마우스를 올리면 이미지가 확대됩니다. */
+}
+
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
