@@ -25,7 +25,7 @@ import boto3
 
 from pydantic import BaseModel
 
-from typing import List
+from typing import List, Optional
 
 import requests
 
@@ -53,7 +53,7 @@ class Audio(BaseModel):
 
 class ImageURLRequest(BaseModel):
     images: List[str]
-    voiceUrl: str
+    voiceUrl: Optional[str] = None
 
 def TTS(voice_id, result):
     
@@ -120,6 +120,7 @@ def delete(voice_id):
 
 @app.post("/ai/text")
 def ipynb(imageRequest: ImageURLRequest):
+    print("요청 들어옴")
     fileName = []
 
     PAT = os.getenv("CLARIFAI_API_KEY")
@@ -199,7 +200,35 @@ def ipynb(imageRequest: ImageURLRequest):
 
     print(result)
 
-    input_voice = imageRequest.voiceUrl
+    voiceUrl = imageRequest.voiceUrl
+
+    # 저장할 로컬 폴더 경로
+    output_folder = "./voice"
+
+    # 폴더가 없다면 생성
+    os.makedirs(output_folder, exist_ok=True)
+
+    input_voice = None
+
+    # URL에서 음성 파일 다운로드
+    if voiceUrl != None :
+        response = requests.get(voiceUrl)
+
+        if response.status_code == 200:
+            # 파일 이름 추출 (URL에서 마지막 슬래시 뒤의 부분을 사용)
+            file_name = voiceUrl.split("/")[-1]
+
+            # 로컬에 파일 저장
+            with open(os.path.join(output_folder, file_name), "wb") as file:
+                file.write(response.content)
+            print(f"{file_name}을(를) 다운로드하여 {output_folder}에 저장했습니다.")
+
+            # input_voice 변수에 저장한 음성 파일의 경로를 할당
+            input_voice = os.path.join(output_folder, file_name)
+            print(f"input_voice 변수에 음성 파일 경로를 할당했습니다: {input_voice}")
+        else:
+            print("파일을 다운로드할 수 없습니다. 상태 코드:", response.status_code)
+
     new_voice_id = ""
     if input_voice:
         new_voice_id = add("custom", input_voice).json()["voice_id"]
