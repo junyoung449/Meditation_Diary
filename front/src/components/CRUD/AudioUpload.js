@@ -5,9 +5,12 @@ import axios from 'axios';
 function AudioUpload() {
   const navigate = useNavigate();
   const location = useLocation();
-  const formData = location.state; // ImageUpload 컴포넌트에서 전달된 FormData
+  const formData = new FormData();
+  const selectedImages = location.state; // ImageUpload 컴포넌트에서 전달된 FormData
 
-  console.log('FormData from location state:', location.state);
+  selectedImages.forEach((image) => {
+    formData.append('images', image); // 이미지를 FormData에 추가
+  });
 
   const handleAudioChange = (event) => {
     const selectedAudios = Array.from(event.target.files);
