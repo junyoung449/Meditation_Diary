@@ -6,7 +6,7 @@ function ImageUpload() {
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
-    navigate('/audio-upload', { state: selectedImages });
+    navigate('/audio-upload', { state: {selectedImages: selectedImages }});
   };
 
   return (
