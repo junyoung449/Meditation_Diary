@@ -51,10 +51,11 @@ function MeditationDetail() {
   };
 
   return (
-    <div>
+    <div className="meditation-detail-container"> {/* 스타일 클래스를 적용 */}
       <img
         src={meditationData.meditationMedia[currentAudioIndex].imageUrl}
         alt="Meditation"
+        className="meditation-image-container"
       />
       <div>
         {/* 재생 버튼과 일시 정지 버튼을 조건부 렌더링 */}
