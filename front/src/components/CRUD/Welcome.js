@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import "Welcome.css"
+import "./Welcome.css"
 
 function MobileWelcome() {
   const history = useHistory();
