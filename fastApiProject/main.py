@@ -94,7 +94,7 @@ def add(id, file):
     
     headers = {
     "Accept": "application/json",
-    "xi-api-key": "4825d47028ddf82c66449a5b4429b775"
+    "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
     }
 
     data = {
@@ -110,7 +110,7 @@ def delete(voice_id):
     
     headers = {
     "Accept": "application/json",
-    "xi-api-key": "4825d47028ddf82c66449a5b4429b775"
+    "xi-api-key": os.getenv("ELEVENLABS_API_KEY")
         }
     url = "https://api.elevenlabs.io/v1/voices/" + voice_id
     response = requests.delete(url, headers=headers)
