@@ -31,10 +31,6 @@ public class VoiceController {
 
         List<MultipartFile> list = new ArrayList<>();
 
-//        list.add(voice);
-//
-//        String[] voiceUrl = awsS3Uploader.upload(list, "voice");
-
         VoiceRequestDto voiceRequestDto = new VoiceRequestDto(memberIdx, voiceName);
 
         response.put("voiceIdx", voiceService.saveVoice(voiceRequestDto, voice));
