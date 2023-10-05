@@ -1,13 +1,11 @@
 package com.project.mt.meditation.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +14,8 @@ import com.project.mt.fileupload.config.AwsS3Uploader;
 import com.project.mt.meditation.dto.response.MeditationListResponseDto;
 import com.project.mt.meditation.dto.response.MeditationResponseDto;
 import com.project.mt.meditation.service.MeditationService;
+import com.project.mt.voice.dto.request.VoiceRequestDto;
+import com.project.mt.voice.service.VoiceService;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,18 +26,26 @@ import org.springframework.web.multipart.MultipartFile;
 public class MeditationController {
 
 	private final MeditationService meditationService;
+	private final VoiceService voiceService;
 	private final AwsS3Uploader awsS3Uploader;
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> save(@RequestParam List<MultipartFile> images,
-								  @RequestParam Long memberIdx) throws IOException {
+								  @RequestParam Long memberIdx, @RequestParam(required = false) MultipartFile voice) throws IOException {
 		Map<String, Object> response = new HashMap<>();
 
+		List<MultipartFile> voiceList = new ArrayList<>();
+		voiceList.add(voice);
+
 		String[] imageUrl = awsS3Uploader.upload(images, "image");
+		String[] voiceUrl = awsS3Uploader.upload(voiceList, "voice");
 
-		Long meditationIdx = meditationService.getMedia(memberIdx, imageUrl);
+		// Long meditationIdx = meditationService.getMedia(memberIdx, voiceUrl, imageUrl);
 
-		response.put("meditationIdx", meditationIdx);
+		response.put("imageUrl", imageUrl[0]);
+		response.put("voiceUrl", voiceUrl[0]);
+
+		// response.put("meditationIdx", meditationIdx);
 
 		return ResponseEntity.ok(response);
 	}
