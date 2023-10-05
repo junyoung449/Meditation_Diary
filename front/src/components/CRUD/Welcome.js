@@ -27,7 +27,6 @@ function MobileWelcome() {
 
   return (
     <div className="mobile-welcome">
-      <p>사진을 업로드하고</p>
       <p>첫 명상에 빠져보세요</p>
     </div>
   );

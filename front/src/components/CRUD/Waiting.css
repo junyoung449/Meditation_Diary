@@ -1,0 +1,12 @@
+.audio-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 20px;
+  }
+  
+  .loading-text {
+    text-align: center;
+  }
+  
