@@ -40,6 +40,10 @@ function AudioUpload() {
       })
       .catch((error) => {
         console.error('Error uploading image(s) and audio:', error);
+        console.log('formData 내용')
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
       });
   };
 
