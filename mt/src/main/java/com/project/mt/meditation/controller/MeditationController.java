@@ -36,17 +36,21 @@ public class MeditationController {
 		Map<String, Object> response = new HashMap<>();
 
 		List<MultipartFile> voiceList = new ArrayList<>();
-		voiceList.add(voice);
+		String[] voiceUrl = new String[1];
+
+		if (voice != null) {
+			voiceList.add(voice);
+			voiceUrl = awsS3Uploader.upload(voiceList, "voice");
+		}
 
 		String[] imageUrl = awsS3Uploader.upload(images, "image");
-		String[] voiceUrl = awsS3Uploader.upload(voiceList, "voice");
 
-		// Long meditationIdx = meditationService.getMedia(memberIdx, voiceUrl, imageUrl);
+		Long meditationIdx = meditationService.getMedia(memberIdx, voiceUrl[0] == null ? null : voiceUrl[0], imageUrl);
 
-		response.put("imageUrl", imageUrl[0]);
-		response.put("voiceUrl", voiceUrl[0]);
+		// response.put("imageUrl", imageUrl[0]);
+		// response.put("voiceUrl", voiceUrl[0]);
 
-		// response.put("meditationIdx", meditationIdx);
+		response.put("meditationIdx", meditationIdx);
 
 		return ResponseEntity.ok(response);
 	}
