@@ -36,14 +36,14 @@ function MeditationDetail() {
     };
   }, [currentAudioIndex, meditationData]);
 
-  const playAudio = () => {
+  const handlePlayAudio = () => {
     if (audioPlayer) {
       audioPlayer.play();
       setIsPlaying(true); // 재생 상태를 true로 설정
     }
   };
-
-  const pauseAudio = () => {
+  
+  const handlePauseAudio = () => {
     if (audioPlayer) {
       audioPlayer.pause();
       setIsPlaying(false); // 재생 상태를 false로 설정
@@ -57,15 +57,12 @@ function MeditationDetail() {
         alt="Meditation"
         className="meditation-image-container"
       />
-      <div>
-        {/* 재생 버튼과 일시 정지 버튼을 조건부 렌더링 */}
-        {isPlaying ? (
-          <button onClick={pauseAudio}>II</button>
-        ) : (
-          <button onClick={playAudio}>▶</button>
-        )}
-      </div>
-      <MeditationFooter setSelectedTab={setSelectedTab} />
+      <MeditationFooter
+        setSelectedTab={setSelectedTab}
+        isPlaying={isPlaying}
+        onPlayClick={handlePlayAudio}
+        onPauseClick={handlePauseAudio}
+      />
     </div>
   );
 }
