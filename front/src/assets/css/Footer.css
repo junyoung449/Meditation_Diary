@@ -1,0 +1,44 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* z-index를 증가시켜 다른 요소 위에 나타나게 함 */
+}
+
+.footer-btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1;
+  text-align: center;
+}
+
+.footer-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-left {
+  border-radius: 15px 0 0 15px;
+}
+
+.btn-center {
+  border-left: none;
+  border-right: none;
+}
+
+.btn-right {
+  border-radius: 0 15px 15px 0;
+}
+
+.dark-theme {
+  filter: invert(100%);
+}

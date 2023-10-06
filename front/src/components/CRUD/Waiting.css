@@ -1,0 +1,22 @@
+.audio-player {
+  display: flex;
+  flex-direction: column; /* 컨텐츠를 세로로 정렬 */
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 20px;
+}
+
+.loading-text {
+  text-align: center;
+  margin-top: 20px; /* 텍스트 위쪽 여백을 늘립니다. */
+  margin-bottom: 20px;
+  font-weight: bold; /* 텍스트를 볼드체로 설정합니다. */
+  color: black !important;
+}
+
+.audio-button {
+  border: none;
+  margin-top: 20px; /* 버튼 위쪽 여백을 추가합니다. */
+  transform: scale(2); /* 버튼 크기를 2배로 키웁니다. */
+}
