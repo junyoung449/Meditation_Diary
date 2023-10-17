@@ -53,7 +53,7 @@
 </details></br>
 
 <details>
-<summary>2. 소개팅</summary>
+<summary>2. 사진 업로드</summary>
 
 ![Alt text](readme사진/image-4.png)
 ![Alt text](readme사진/image-7.png)
@@ -61,7 +61,7 @@
 </details></br>
 
 <details>
-<summary>3. 프로젝트</summary>
+<summary>3. 명상 글 조회</summary>
 ![Alt text](readme사진/image-8.png)
 ![Alt text](readme사진/image-9.png)
 ![Alt text](readme사진/image-10.png)
@@ -69,20 +69,10 @@
 </details></br>
 
 <details>
-<summary>4. 채팅</summary>
+<summary>4. 피드, 캘린더 조회</summary>
 ![Alt text](readme사진/image-12.png)
 ![Alt text](readme사진/image-13.png)
 ![Alt text](readme사진/image-14.png)
-</details></br>
-
-<details>
-<summary>5. SSAFY-TOWN</summary>
-![Alt text](readme사진/image-15.png)
-![Alt text](readme사진/image-20.png)
-![Alt text](readme사진/image-16.png)
-![Alt text](readme사진/image-17.png)
-![Alt text](readme사진/image-18.png)
-![Alt text](readme사진/image-19.png)
 </details></br>
 
 ## 🖥️ 개발 환경
