@@ -1,6 +1,6 @@
 # 🧘심신수양록
 **이미지 ➡️ 텍스트 ➡️ 음성**
-<br><br>
+<br>
 
 **목표 : 자존감이 낮은, 수면장애가 있는 현대인들을 위해 명상 서비스를 제공**
 
@@ -16,7 +16,7 @@
 
  - 각 날짜에 작성된 명상 글을 조회합니다.
 
- <br><br>
+ <br>
 
 
 ## 📅프로젝트 기간
@@ -120,16 +120,18 @@
 
 ## 🔧 서비스 아키텍쳐
 
-![Alt text](readme사진/image-23.png)
+![image](https://github.com/gudtjr2949/gudtjr2949/assets/83962223/4fd848c8-94ad-4d9f-9b1e-72c567d14c87)
+<br>
 
 ## 📑 API 명세서
 
-![Alt text](readme사진/image-2.png)
+https://silent-asterisk-64c.notion.site/API-530765c9f7e14241addc7cdc23b89eef?pvs=4
+<br>
 
 ## ✨ERD
 
-![Alt text](readme사진/image.png)
-
+![image](https://github.com/gudtjr2949/gudtjr2949/assets/83962223/69fa9ccf-1a75-4b31-b2ac-c1c995290119)
+<br>
 
 ## 🌐EC2 PORT
 
