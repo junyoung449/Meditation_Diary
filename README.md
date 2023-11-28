@@ -41,40 +41,6 @@
 - Webex
 
 
-
-## 🛠️주요 기능
-
-<details>
-<summary>1. 로그인</summary>
-
-![Alt text](readme사진/image-3.png)
-![Alt text](readme사진/image-21.png)
-![Alt text](readme사진/image-22.png)
-</details></br>
-
-<details>
-<summary>2. 사진 업로드</summary>
-
-![Alt text](readme사진/image-4.png)
-![Alt text](readme사진/image-7.png)
-![Alt text](readme사진/image-6.png)
-</details></br>
-
-<details>
-<summary>3. 명상 글 조회</summary>
-![Alt text](readme사진/image-8.png)
-![Alt text](readme사진/image-9.png)
-![Alt text](readme사진/image-10.png)
-![Alt text](readme사진/image-11.png)
-</details></br>
-
-<details>
-<summary>4. 피드, 캘린더 조회</summary>
-![Alt text](readme사진/image-12.png)
-![Alt text](readme사진/image-13.png)
-![Alt text](readme사진/image-14.png)
-</details></br>
-
 ## 🖥️ 개발 환경
 
 🖱**Backend**
